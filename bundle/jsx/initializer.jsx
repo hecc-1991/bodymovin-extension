@@ -2,7 +2,7 @@
 /*global $*/
 
 
-$.__bodymovin = $.__bodymovin || {esprima:{}}
+$.__bodymovin = $.__bodymovin || { esprima: {} }
 var extensionPath = $.fileName.split('/').slice(0, -1).join('/') + '/';
 
 $.evalFile(extensionPath + 'JSON.jsx');
@@ -51,16 +51,17 @@ $.evalFile(extensionPath + 'utils/sourceHelper.jsx');
 $.evalFile(extensionPath + 'utils/shapeHelper.jsx');
 $.evalFile(extensionPath + 'utils/textShapeHelper.jsx');
 $.evalFile(extensionPath + 'utils/transformation-matrix.jsx');
+$.evalFile(extensionPath + 'utils/lutHelper.jsx');
 
-var globalVariables = ['bm_eventDispatcher','bm_generalUtils','bm_expressionHelper','esprima', 'escodegen'
-, 'bez', 'PropertyFactory', 'bm_keyframeHelper', 'bm_transformHelper', 'bm_maskHelper', 'bm_timeremapHelper'
-, 'bm_effectsHelper', 'bm_layerStylesHelper', 'bm_cameraHelper', 'bm_XMPHelper', 'bm_ProjectHelper', 'bm_markerHelper'
-, 'bm_textHelper', 'bm_boundingBox', 'bm_layerElement', 'bm_projectManager', 'bm_compsManager', 'bm_dataManager'
-, 'bm_renderManager', 'bm_downloadManager', 'bm_sourceHelper', 'bm_shapeHelper', 'bm_textAnimatorHelper'
-, 'bm_textShapeHelper']
+var globalVariables = ['bm_eventDispatcher', 'bm_generalUtils', 'bm_expressionHelper', 'esprima', 'escodegen'
+	, 'bez', 'PropertyFactory', 'bm_keyframeHelper', 'bm_transformHelper', 'bm_maskHelper', 'bm_timeremapHelper'
+	, 'bm_effectsHelper', 'bm_layerStylesHelper', 'bm_cameraHelper', 'bm_XMPHelper', 'bm_ProjectHelper', 'bm_markerHelper'
+	, 'bm_textHelper', 'bm_boundingBox', 'bm_layerElement', 'bm_projectManager', 'bm_compsManager', 'bm_dataManager'
+	, 'bm_renderManager', 'bm_downloadManager', 'bm_sourceHelper', 'bm_shapeHelper', 'bm_textAnimatorHelper'
+	, 'bm_textShapeHelper', 'bm_lutHelper']
 var i, len = globalVariables.length;
-for(i = 0; i < len; i += 1) {
-	if(this[globalVariables[i]]) {
+for (i = 0; i < len; i += 1) {
+	if (this[globalVariables[i]]) {
 		this[globalVariables[i]] = null;
 		delete this[globalVariables[i]];
 		//$.__bodymovin.bm_eventDispatcher.log(globalVariables[i] + ' exists');

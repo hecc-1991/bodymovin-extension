@@ -11,11 +11,14 @@ $.__bodymovin.bm_renderManager = (function () {
     var bm_layerElement = $.__bodymovin.bm_layerElement;
     var bm_ProjectHelper = $.__bodymovin.bm_ProjectHelper;
     var bm_fileManager = $.__bodymovin.bm_fileManager;
+    var bm_lutHelper = $.__bodymovin.bm_lutHelper;
 
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
     var version_number = '5.6.6';
     var version_tutu_number = '2.2.5';
+
+    var _lutPath;
 
     function getParentData(layers, id) {
         var i = 0, len = layers.length;
@@ -131,10 +134,13 @@ $.__bodymovin.bm_renderManager = (function () {
     function render(comp, destination, fsDestination, compSettings, lutPath) {
         $.__bodymovin.bm_sourceHelper.reset();
         $.__bodymovin.bm_textShapeHelper.reset();
+        bm_lutHelper.reset();
 
         if (!bm_fileManager.createTemporaryFolder()) {
             return;
         };
+
+        _lutPath = lutPath;
 
         ////
         app.beginUndoGroup("Render Bodymovin Animation");
@@ -166,9 +172,7 @@ $.__bodymovin.bm_renderManager = (function () {
             fonts: [],
             layers: [],
             markers: [],
-            lut: {
-                p: lutPath
-            }
+            lut: []
 
         };
         currentExportedComps.push(currentCompID);
@@ -316,7 +320,7 @@ $.__bodymovin.bm_renderManager = (function () {
             }*/
         } else {
             removeExtraData();
-
+            bm_lutHelper.exportLut(destinationPath, _lutPath, ob.renderData.exportData.lut, currentCompID, currentCompSettings.original_names);
             $.__bodymovin.bm_sourceHelper.exportAudios(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
             $.__bodymovin.bm_sourceHelper.exportVideos(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
             $.__bodymovin.bm_sourceHelper.exportTexts(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
