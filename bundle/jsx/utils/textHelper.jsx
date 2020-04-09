@@ -61,6 +61,16 @@ $.__bodymovin.bm_textHelper = (function () {
             var i, len;
             ob.s = textDocument.fontSize;
             ob.f = textDocument.font;
+			ob.nm = duplicatedLayerInfo.name;
+			ob.le = textDocument.leading;
+			ob.fb = textDocument.fauxBold;
+			ob.fi = textDocument.fauxItalic;
+			ob.ac = textDocument.allCaps;
+			ob.sa = textDocument.smallCaps;
+			ob.sp = textDocument.superscript;
+			ob.sb = textDocument.subscript;
+			ob.hs = textDocument.horizontalScale;
+			ob.vs = textDocument.verticalScale;
             $.__bodymovin.bm_sourceHelper.addFont(textDocument.font, textDocument.fontFamily, textDocument.fontStyle);
             if(textDocument.allCaps){
                 ob.t = textDocument.text.toUpperCase();
@@ -177,6 +187,15 @@ $.__bodymovin.bm_textHelper = (function () {
         };
         var stretch = layerOb.sr || 1;
         exportTextDocumentData(layerInfo, layerOb.t.d, frameRate, stretch);
+		if(layerOb.t.d.x){
+			var matchinfo = layerOb.t.d.x.match(/\.layer\S*\)\.text\.sourceText/);
+			if(matchinfo.length){
+				layerOb.nm = matchinfo[0].replace(".layer('","").replace("').text.sourceText","");
+				var text_data = $.__bodymovin.bm_sourceHelper.searchText(layerOb.nm);
+				layerOb.refId = text_data.id;
+				layerOb.t.d.k[0].s.t = text_data.t;
+			}
+		}
         var textProperty = layerInfo.property("Text");
         
         var i, len = textProperty.numProperties;

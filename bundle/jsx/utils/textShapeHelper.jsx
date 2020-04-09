@@ -266,8 +266,25 @@ $.__bodymovin.bm_textShapeHelper = (function () {
         
         bm_renderManager.setChars(chars);
     }
+	
+    function saveFontFileToFolder(src_filename,dst_filename,filename) {
+        var src = new File(src_filename);
+        var dst = new File(dst_filename);
+		var path = dst.parent;
+		path.changePath ("fonts/");
+		if(!path.exists)
+			path.create();
+		if(src.exists) {
+            src.copy(path.absoluteURI+'/'+filename+".ttf");
+        }	
+    }
     
-    function exportFonts(fonts) {
+    function exportFonts(fonts,path) {
+
+		for(var i=0;i<fonts.list.length;i++){
+			saveFontFileToFolder(fonts.list[i].fPath,path,fonts.list[i].fName);
+		}
+
         fontComp.openInViewer();
         var i, len = fonts.list.length, rect, baseLineShift;
         var fontProp = boxText.property("Source Text");
@@ -284,6 +301,7 @@ $.__bodymovin.bm_textShapeHelper = (function () {
                 baseLineShift = fontDocument.baselineShift;
             }
             fonts.list[i].ascent = 250 + rect.top + rect.height + baseLineShift;
+            fonts.list[i].u = 'fonts/';
         }
     }
     

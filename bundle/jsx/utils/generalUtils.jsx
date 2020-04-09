@@ -43,6 +43,11 @@ $.__bodymovin.bm_generalUtils = (function () {
     }
     
     function rgbToHex(r, g, b) {
+		//---------- tutu
+		r = Math.min(Math.max(r, 0), 255);
+		g = Math.min(Math.max(g, 0), 255);
+		b = Math.min(Math.max(b, 0), 255);
+		//---------- tutu end
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     }
     

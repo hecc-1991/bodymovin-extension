@@ -133,6 +133,127 @@ $.__bodymovin.bm_dataManager = (function () {
         results[exportTypes.STANDALONE].status = exportStatuses.IDLE;
         results[exportTypes.STANDARD].status = exportStatuses.IDLE;
     }
+	
+		function mergeImageAssert(layer,assets, start, end)
+	{
+		if (layer == null || layer.refId == '') return;
+			
+		for(var i = 0;i < assets.length;i++){
+			var elem = assets[i];
+			if(elem.ty == 1 && elem.id == layer.refId){
+			elem.st = elem.st?((elem.st > start) ? start : elem.st):start;
+			elem.end = elem.end?((elem.end < end) ? end : elem.end):end;				
+			break;
+			}
+		}
+	}
+
+	function mergeVideoAssert(layer,assets, start, end)
+	{
+		if (layer == null || layer.refId == '') return;
+
+		for(var i = 0;i < assets.length;i++){
+			var elem = assets[i];
+			if(elem.ty == 4 && elem.id == layer.refId){
+				elem.st = elem.st?((elem.st > start) ? start : elem.st):start;
+				elem.end = elem.end?((elem.end < end) ? end : elem.end):end;
+				break;
+			}
+		}
+	}
+
+	function mergeTextAssert(layer,assets, start, end)
+	{
+		if (layer == null || layer.refId == '') return;
+
+		for(var i = 0;i < assets.length;i++){
+			var elem = assets[i];
+			if(elem.ty == 3 && elem.id == layer.refId){
+				elem.st = elem.st?((elem.st > start) ? start : elem.st):start;
+				elem.end = elem.end?((elem.end < end) ? end : elem.end):end;
+				break;
+			}
+		}
+	}
+
+	function mergeAudioAssert(layer,assets, start, end)
+	{
+		if (layer == null || layer.refId == '') return;
+
+		for(var i = 0;i < assets.length;i++){
+			var elem = assets[i];
+			if(elem.ty == 2 && elem.id == layer.refId){
+				elem.st = elem.st?((elem.st > start) ? start : elem.st):start;
+				elem.end = elem.end?((elem.end < end) ? end : elem.end):end;
+				break;
+			}
+		}
+	}
+
+	function mergePrecomps(layer, assets, start,max_inframe, min_outframe)
+	{
+		if (layer == null || layer.refId == '') return;
+
+		var elem;
+		var findElem = false;
+		for(var i = 0;i < assets.length;i++){
+			elem = assets[i];
+			if(elem.ty == undefined && elem.id == layer.refId){
+				findElem = true;
+				break;
+			}
+		}
+
+		if (!findElem || elem.layers == null) return;
+
+		for (var j = 0;j < elem.layers.length;j++)
+		{
+			mergeLayerAssert(elem.layers[j], assets, start, max_inframe, min_outframe);
+		}
+	}
+	
+	function mergeLayerAssert(layer, assets, start, max_inframe, min_outframe){
+		
+		var cur_inframe = layer.ip + start;
+		max_inframe = cur_inframe > max_inframe ? cur_inframe : max_inframe;
+
+		var cur_ouframe = layer.op + start;
+		min_outframe = cur_ouframe < min_outframe ? cur_ouframe : min_outframe;
+		
+		var new_start = start + layer.st;
+
+		switch (layer.ty)
+		{
+		case 2:
+			mergeImageAssert(layer, assets, max_inframe, min_outframe);
+			break;
+		case 5: 
+			mergeTextAssert(layer, assets, max_inframe, min_outframe);
+			break;
+		case 9:
+			mergeVideoAssert(layer, assets, max_inframe, min_outframe);
+			break;
+		case 6:
+			mergeAudioAssert(layer, assets, max_inframe, min_outframe);
+			break;
+		case 0:
+			mergePrecomps(layer, assets, new_start,  max_inframe,min_outframe);
+			break;
+		default:
+			break;
+		}		
+	}
+	
+	function sortAssets(layers,assets,ip,op){
+		//var layers = ob.renderData.exportData.layers;
+		
+		//var assets = ob.renderData.exportData.assets;
+		for(var i = 0;layers != null && i < layers.length;i++){
+			var layer = layers[i];
+			mergeLayerAssert(layer, assets, 0-ip,0, op - ip);
+		}
+		
+	}
     
     function saveData(data, destinationPath, config, callback) {
 
@@ -147,6 +268,8 @@ $.__bodymovin.bm_dataManager = (function () {
         deleteExtraParams(data, config);
         separateComps(data.layers, data.comps);
         moveCompsToAssets(data);
+		
+		sortAssets(data.layers,data.assets,data.ip,data.op);
 
         var stringifiedData = JSON.stringify(data);
         stringifiedData = stringifiedData.replace(/\n/g, '');

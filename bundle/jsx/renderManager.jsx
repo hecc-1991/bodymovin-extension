@@ -14,7 +14,8 @@ $.__bodymovin.bm_renderManager = (function () {
     
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
-    var version_number = '4.8.0';
+    var version_number = '5.6.6';
+    var version_tutu_number = '2.2.5';
 
     function getParentData(layers, id) {
         var i = 0, len = layers.length;
@@ -113,7 +114,7 @@ $.__bodymovin.bm_renderManager = (function () {
         for (i = 0; i < len; i += 1) {
             layerData = layers[i];
             layerInfo = comp.layers[i + 1];
-            bm_layerElement.checkLayerSource(layerInfo, layerData);
+            bm_layerElement.checkLayerSource(layerInfo, layerData,framerate);
             if (layerData.ty === layerTypes.text) {
                 $.__bodymovin.bm_textShapeHelper.addComps();
             }
@@ -127,12 +128,12 @@ $.__bodymovin.bm_renderManager = (function () {
         }
     }
 
-    function render(comp, destination, fsDestination, compSettings, lutPath) {
+    function render(comp, destination, fsDestination, compSettings) {
 
         $.__bodymovin.bm_sourceHelper.reset();
         $.__bodymovin.bm_textShapeHelper.reset();
 
-        if (!bm_fileManager.createTemporaryFolder()) {
+        if(!bm_fileManager.createTemporaryFolder()) {
             return;
         };
 
@@ -144,30 +145,29 @@ $.__bodymovin.bm_renderManager = (function () {
         currentCompSettings = compSettings;
 
         bm_ProjectHelper.init();
-        bm_eventDispatcher.sendEvent('bm:render:update', { type: 'update', message: 'Starting Render', compId: currentCompID, progress: 0 });
+        bm_eventDispatcher.sendEvent('bm:render:update', {type: 'update', message: 'Starting Render', compId: currentCompID, progress: 0});
         destinationPath = destination;
         fsDestinationPath = fsDestination;
         bm_layerElement.reset();
         pendingLayers.length = 0;
         pendingComps.length = 0;
         var exportData = {
-            v: version_number,
-            fr: comp.frameRate,
-            ip: comp.workAreaStart * comp.frameRate,
-            op: (comp.workAreaStart + comp.workAreaDuration) * comp.frameRate,
-            w: comp.width,
-            h: comp.height,
+	    fix:"TuSDK EVA Template Export Tool",
+            v : version_number,
+            tv : version_tutu_number,
+            fr : comp.frameRate,
+            ip : comp.workAreaStart * comp.frameRate,
+            op : (comp.workAreaStart + comp.workAreaDuration) * comp.frameRate,
+            w : comp.width,
+            h : comp.height,
             nm: comp.name,
-            ddd: 0,
-            assets: [],
-            comps: [],
-            fonts: [],
-            layers: [],
-            markers: [],
-            lut: {
-                p: lutPath
-            }
-
+            ddd : 0,
+            assets : [],
+            comps : [],
+            fonts : [],
+            layers : [],
+            markers : []
+            
         };
         currentExportedComps.push(currentCompID);
         ob.renderData.exportData = exportData;
@@ -314,7 +314,11 @@ $.__bodymovin.bm_renderManager = (function () {
             }*/
         } else {
             removeExtraData();
-            $.__bodymovin.bm_sourceHelper.exportImages(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names, currentCompSettings.original_assets);
+
+			$.__bodymovin.bm_sourceHelper.exportAudios(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
+			$.__bodymovin.bm_sourceHelper.exportVideos(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
+			$.__bodymovin.bm_sourceHelper.exportTexts(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
+            $.__bodymovin.bm_sourceHelper.exportImages(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
         }
     }
     
@@ -339,7 +343,7 @@ $.__bodymovin.bm_renderManager = (function () {
                 }
                 exportData = ob.renderData.exportData;
                 exportData.fonts = fontsInfo;
-                $.__bodymovin.bm_textShapeHelper.exportFonts(fontsInfo);
+                $.__bodymovin.bm_textShapeHelper.exportFonts(fontsInfo,destinationPath);
                 $.__bodymovin.bm_textShapeHelper.exportChars(fontsInfo);
             } else {
                 exportData = ob.renderData.exportData;
@@ -363,7 +367,7 @@ $.__bodymovin.bm_renderManager = (function () {
     function setFontData(fontData) {
         var exportData = ob.renderData.exportData;
         exportData.fonts = fontData;
-        $.__bodymovin.bm_textShapeHelper.exportFonts(fontData);
+        $.__bodymovin.bm_textShapeHelper.exportFonts(fontData,destinationPath);
         //$.__bodymovin.bm_textShapeHelper.exportChars(fontData);
         saveData();
     }
@@ -387,7 +391,7 @@ $.__bodymovin.bm_renderManager = (function () {
     }
 
     function getVersion() {
-        bm_eventDispatcher.sendEvent('bm:version', {value: version_number});
+        bm_eventDispatcher.sendEvent('bm:version', {value: version_number + " - " + version_tutu_number});
         bm_eventDispatcher.sendEvent('app:version', {value: app.version});
     }
 

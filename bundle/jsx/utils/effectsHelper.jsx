@@ -71,6 +71,22 @@ $.__bodymovin.bm_effectsHelper = (function () {
         }
     }
 
+	/*
+		*** PropertyValueType enum ***
+		Name: COLOR, 			Value: 6418
+		Name: CUSTOM_VALUE, 	Value: 6419
+		Name: LAYER_INDEX, 		Value: 6421
+		Name: MARKER, 			Value: 6420
+		Name: MASK_INDEX, 		Value: 6422
+		Name: NO_VALUE, 		Value: 6412
+		Name: OneD, 			Value: 6417
+		Name: SHAPE, 			Value: 6423
+		Name: TEXT_DOCUMENT, 	Value: 6424
+		Name: ThreeD, 			Value: 6414
+		Name: ThreeD_SPATIAL, 	Value: 6413
+		Name: TwoD, 			Value: 6416
+		Name: TwoD_SPATIAL, 	Value: 6415		
+	*/	
     function findEffectPropertyType(prop) {
         var propertyValueType = prop.propertyValueType;
                 // bm_eventDispatcher.log(prop.name);
@@ -100,6 +116,7 @@ $.__bodymovin.bm_effectsHelper = (function () {
         } else {
             return effectTypes.pointControl;
         }
+        return '';
     }
     
     function exportNoValueControl(effect, frameRate, stretch) {
@@ -122,6 +139,16 @@ $.__bodymovin.bm_effectsHelper = (function () {
         return ob;
     }
     
+    function exportAngleControl(effect, frameRate, stretch) {
+        var ob = {};
+        ob.ty = effectTypes.angleControl;
+        ob.nm = effect.name;
+        ob.mn = effect.matchName;
+        ob.ix = effect.propertyIndex;
+        ob.v = bm_keyframeHelper.exportKeyframes(effect, frameRate, stretch);
+        return ob;
+    }
+    
     function exportColorControl(effect, frameRate, stretch) {
         var ob = {};
         ob.ty = effectTypes.colorControl;
@@ -135,6 +162,16 @@ $.__bodymovin.bm_effectsHelper = (function () {
     function exportPointControl(effect, frameRate, stretch) {
         var ob = {};
         ob.ty = effectTypes.pointControl;
+        ob.nm = effect.name;
+        ob.mn = effect.matchName;
+        ob.ix = effect.propertyIndex;
+        ob.v = bm_keyframeHelper.exportKeyframes(effect, frameRate, stretch);
+        return ob;
+    }
+    
+    function exportCheckboxControl(effect, frameRate, stretch) {
+        var ob = {};
+        ob.ty = effectTypes.checkboxControl;
         ob.nm = effect.name;
         ob.mn = effect.matchName;
         ob.ix = effect.propertyIndex;
@@ -222,7 +259,7 @@ $.__bodymovin.bm_effectsHelper = (function () {
                 || prop.matchName === "ADBE FreePin3 StarchPins" 
                 || prop.matchName === "ADBE FreePin3 HghtPins" 
                 || prop.matchName === "ADBE FreePin3 PosPin Atom") {
-                ob.ef.push(exportCustomEffect(prop, frameRate, stretch));
+                ob.ef.push(exportCustomEffect(prop,effectType, frameRate, stretch));
             } else if(prop.propertyType === PropertyType.PROPERTY){
                 var type = findEffectPropertyType(prop);
                 //effectTypes.noValue;
@@ -246,8 +283,14 @@ $.__bodymovin.bm_effectsHelper = (function () {
                     ob.ef.push(exportPointControl(prop, frameRate, stretch));
                 }
             } else {
-                if(prop.name !== 'Compositing Options' && prop.matchName !== 'ADBE Effect Built In Params' && prop.propertyType !== PropertyType.NAMED_GROUP) {
-                    ob.ef.push(exportCustomEffect(prop, frameRate, stretch));
+				//comp option
+                //if(prop.name !== 'Compositing Options' && prop.matchName !== 'ADBE Effect Built In Params' && prop.propertyType !== PropertyType.NAMED_GROUP) {
+                /* prop.propertyType
+				6213 : comp option
+				6214 : comp option --> mask
+				*/
+				if(prop.name !== 'Compositing Options' && prop.propertyType == 6213) {
+                    ob.ef.push(exportCustomEffect(prop, effectType,frameRate, stretch));
                 } else {
                     bm_eventDispatcher.log(prop.matchName)
                 }

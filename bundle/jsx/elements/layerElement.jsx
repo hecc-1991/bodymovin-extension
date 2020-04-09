@@ -24,8 +24,12 @@ $.__bodymovin.bm_layerElement = (function () {
     function prepareLayer(layerInfo, ind) {
         var layerData = {};
         var layerType = getLayerType(layerInfo);
-
-        if (layerType === layerTypes.audio || layerType === layerTypes.light || layerType === layerTypes.pholderStill || layerType === layerTypes.pholderVideo) {
+		
+		//if(layerType === layerTypes.audio){
+		//	alert("prepare audio------------name = "+layerInfo.name);
+		//}
+		//layerType === layerTypes.audio ||
+        if ( layerType === layerTypes.light || layerType === layerTypes.adjustment || layerType === layerTypes.pholderStill || layerType === layerTypes.pholderVideo) {
             layerData.isValid = false;
             layerData.render = false;
         }
@@ -92,7 +96,7 @@ $.__bodymovin.bm_layerElement = (function () {
     
     var compCount = 0;
     
-    function checkLayerSource(layerInfo, layerData) {
+    function checkLayerSource(layerInfo, layerData,framerate) {
         if (layerData.render === false) {
             return;
         }
@@ -100,7 +104,7 @@ $.__bodymovin.bm_layerElement = (function () {
         var layerType = layerData.ty;
         var sourceId;
         if (layerType === layerTypes.precomp) {
-            sourceId = bm_sourceHelper.checkCompSource(layerInfo);
+            sourceId = bm_sourceHelper.checkCompSource(layerInfo, layerType);
             if (sourceId !== false) {
                 layerData.refId = sourceId;
             } else {
@@ -111,8 +115,23 @@ $.__bodymovin.bm_layerElement = (function () {
                 bm_sourceHelper.setCompSourceId(layerInfo.source, layerData.compId);
             }
         } else if (layerType === layerTypes.still) {
-            layerData.refId = bm_sourceHelper.checkImageSource(layerInfo);
-        } else if (layerType === layerTypes.imageSeq) {
+            layerData.refId = bm_sourceHelper.checkImageSource(layerInfo,framerate);
+        	//alert("find image------------id = "+layerData.refId);
+        }else if(layerType === layerTypes.solid){
+			//alert("find solid------------");
+		}else if(layerType === layerTypes.nullLayer){
+			//alert("find nullLayer------------");
+		}else if(layerType === layerTypes.shape){
+			//alert("find shape------------");
+		}else if(layerType === layerTypes.text){
+			//alert("find text------------");
+			layerData.refId = bm_sourceHelper.checkTextSource(layerInfo,framerate);
+		}else if(layerType === layerTypes.audio){
+			layerData.refId = bm_sourceHelper.checkAudioSource(layerInfo,framerate);
+			//alert("find audio------------id = "+layerData.refId+" name= "+layerInfo.name);
+		}else if(layerType === layerTypes.pholderVideo){
+			//alert("find pholderVideo------------");
+		}else if(layerType === layerTypes.imageSeq){
             sourceId = bm_sourceHelper.searchSequenceSource(layerInfo);
             layerData.refId = sourceId;
             if (!sourceId) {
@@ -120,7 +139,20 @@ $.__bodymovin.bm_layerElement = (function () {
                 layerData.refId = sourceId;
                 layerData.compId = sourceId;
             }
-        }
+		}else if(layerType === layerTypes.video){
+			layerData.refId = bm_sourceHelper.checkVideoSource(layerInfo,framerate);
+			//alert("find video------------");
+		}else if(layerType === layerTypes.pholderStill){
+			//alert("find pholderStill------------");
+		}else if(layerType === layerTypes.guide){
+			//alert("find guide------------");
+		}else if(layerType === layerTypes.adjustment){
+			//alert("find adjustment------------");
+		}else if(layerType === layerTypes.camera){
+			//alert("find camera------------");
+		}else if(layerType === layerTypes.light){
+			//alert("find light------------");
+		}
     }
     
     function renderLayer(layerOb, includeHiddenData, callback) {
