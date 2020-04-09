@@ -1,18 +1,18 @@
 import csInterface from './CSInterfaceHelper'
 import extensionLoader from './ExtensionLoader'
-import {dispatcher} from './storeDispatcher'
+import { dispatcher } from './storeDispatcher'
 import actions from '../redux/actions/actionTypes'
-import {versionFetched, appVersionFetched} from '../redux/actions/generalActions'
-import {saveFile as bannerSaveFile} from './bannerHelper'
-import {saveFile as avdSaveFile} from './avdHelper'
-import {splitAnimation} from './splitAnimationHelper'
+import { versionFetched, appVersionFetched } from '../redux/actions/generalActions'
+import { saveFile as bannerSaveFile } from './bannerHelper'
+import { saveFile as avdSaveFile } from './avdHelper'
+import { splitAnimation } from './splitAnimationHelper'
 
 csInterface.addEventListener('bm:compositions:list', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let compositions = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		dispatcher({ 
-				type: actions.COMPOSITIONS_UPDATED,
-				compositions: compositions
+		dispatcher({
+			type: actions.COMPOSITIONS_UPDATED,
+			compositions: compositions
 		})
 	} else {
 	}
@@ -20,11 +20,11 @@ csInterface.addEventListener('bm:compositions:list', function (ev) {
 
 csInterface.addEventListener('bm:render:complete', function (ev) {
 	//console.log('COMPLETE RENDER')
-	if(ev.data) {
+	if (ev.data) {
 		let id = ev.data
-		dispatcher({ 
-				type: actions.RENDER_COMPLETE,
-				id: id
+		dispatcher({
+			type: actions.RENDER_COMPLETE,
+			id: id
 		})
 	} else {
 	}
@@ -44,32 +44,32 @@ csInterface.addEventListener('bm:render:start', function (ev) {
 
 csInterface.addEventListener('console:log', function (ev) {
 	console.log('LOGGING:', ev.data)
-		dispatcher({ 
-				type: actions.GENERAL_LOG,
-				data: ev.data
-		})
+	dispatcher({
+		type: actions.GENERAL_LOG,
+		data: ev.data
+	})
 })
 
 csInterface.addEventListener('bm:render:update', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		dispatcher({ 
-				type: actions.RENDER_UPDATE,
-				data: data
+		dispatcher({
+			type: actions.RENDER_UPDATE,
+			data: data
 		})
 	} else {
 	}
 })
 
 csInterface.addEventListener('bm:render:fonts', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		if(typeof data.fonts === "string") {
+		if (typeof data.fonts === "string") {
 			data.fonts = JSON.parse(data.fonts)
 		}
-		dispatcher({ 
-				type: actions.RENDER_FONTS,
-				data: data
+		dispatcher({
+			type: actions.RENDER_FONTS,
+			data: data
 		})
 		//browserHistory.push('/fonts')
 	} else {
@@ -77,25 +77,25 @@ csInterface.addEventListener('bm:render:fonts', function (ev) {
 })
 
 csInterface.addEventListener('bm:image:process', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		
+
 		//Fix for AE 2014
-		if(data && data.should_compress === 'false') {
+		if (data && data.should_compress === 'false') {
 			data.should_compress = false
 		}
-		if(data && data.should_encode_images === 'false') {
+		if (data && data.should_encode_images === 'false') {
 			data.should_encode_images = false
 
 		}
-		if(data && typeof data.compression_rate === 'string') {
+		if (data && typeof data.compression_rate === 'string') {
 			data.compression_rate = Number(data.compression_rate)
 		}
 		//End fix for AE 2014
 
-		dispatcher({ 
-				type: actions.RENDER_PROCESS_IMAGE,
-				data: data
+		dispatcher({
+			type: actions.RENDER_PROCESS_IMAGE,
+			data: data
 		})
 		//browserHistory.push('/fonts')
 	} else {
@@ -103,12 +103,12 @@ csInterface.addEventListener('bm:image:process', function (ev) {
 })
 
 csInterface.addEventListener('bm:project:id', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 		let id = data.id
-		dispatcher({ 
-				type: actions.PROJECT_SET_ID,
-				id: id
+		dispatcher({
+			type: actions.PROJECT_SET_ID,
+			id: id
 		})
 	} else {
 	}
@@ -119,67 +119,78 @@ csInterface.addEventListener('bm:project:path', function (ev) {
 	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 		let path = data.path
-		dispatcher({ 
-				type: actions.PROJECT_SET_PATH,
-				path: path
+		dispatcher({
+			type: actions.PROJECT_SET_PATH,
+			path: path
 		})
 	}
 })
 
 csInterface.addEventListener('bm:composition:destination_set', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let compositionData = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		dispatcher({ 
-				type: actions.COMPOSITION_SET_DESTINATION,
-				compositionData: compositionData
+		dispatcher({
+			type: actions.COMPOSITION_SET_DESTINATION,
+			compositionData: compositionData
+		})
+	} else {
+	}
+})
+
+csInterface.addEventListener('bm:composition:lutPath_set', function (ev) {
+	if (ev.data) {
+		let compositionData = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
+		dispatcher({
+			type: actions.COMPOSITION_SET_LUTPATH,
+			compositionData: compositionData
 		})
 	} else {
 	}
 })
 
 csInterface.addEventListener('bm:create:avd', async function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		try {
 			let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data;
 			await avdSaveFile(data.origin, data.destination)
 			// let animationData = JSON.parse(data.animation);
 			// saveAVD(animationData, data.destination);
 			const eScript = "$.__bodymovin.bm_avdExporter.saveAVDDataSuccess()";
-	    	csInterface.evalScript(eScript);
-		} catch(err) {
-	    	const eScript = '$.__bodymovin.bm_avdExporter.saveAVDFailed()';
-	    	csInterface.evalScript(eScript);
-		} 
+			csInterface.evalScript(eScript);
+		} catch (err) {
+			const eScript = '$.__bodymovin.bm_avdExporter.saveAVDFailed()';
+			csInterface.evalScript(eScript);
+		}
 	} else {
 	}
 })
 
 csInterface.addEventListener('bm:create:rive', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data;
-		dispatcher({ 
-				type: actions.RIVE_SAVE_DATA,
-				origin: data.origin,
-				destination: data.destination,
-				fileName: decodeURIComponent(data.fileName),
+		dispatcher({
+			type: actions.RIVE_SAVE_DATA,
+			origin: data.origin,
+			destination: data.destination,
+			fileName: decodeURIComponent(data.fileName),
 		})
 	} else {
 	}
 })
 
 csInterface.addEventListener('bm:alert', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
-		dispatcher({ 
-				type: actions.WRITE_ERROR,
-				pars: data.message.split('<br />')
+		dispatcher({
+			type: actions.WRITE_ERROR,
+			pars: data.message.split('<br />')
 		})
 	} else {
 	}
 })
 
 csInterface.addEventListener('bm:version', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 		dispatcher(versionFetched(data.value))
 	} else {
@@ -187,7 +198,7 @@ csInterface.addEventListener('bm:version', function (ev) {
 })
 
 csInterface.addEventListener('app:version', function (ev) {
-	if(ev.data) {
+	if (ev.data) {
 		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 		dispatcher(appVersionFetched(data.value))
 	} else {
@@ -196,7 +207,7 @@ csInterface.addEventListener('app:version', function (ev) {
 
 csInterface.addEventListener('bm:zip:banner', async function (ev) {
 	try {
-		if(ev.data) {
+		if (ev.data) {
 			const data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 			////
 			await bannerSaveFile(data.folderPath, data.destinationPath);
@@ -204,14 +215,14 @@ csInterface.addEventListener('bm:zip:banner', async function (ev) {
 		} else {
 			throw new Error('Missing data')
 		}
-	} catch(err) {
+	} catch (err) {
 		csInterface.evalScript('$.__bodymovin.bm_bannerExporter.bannerFailed()');
 	}
 })
 
 csInterface.addEventListener('bm:split:animation', async function (ev) {
 	try {
-		if(ev.data) {
+		if (ev.data) {
 			const data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
 			////
 			const splitResponse = await splitAnimation(data.origin, data.destination, decodeURIComponent(data.fileName), data.time);
@@ -219,14 +230,14 @@ csInterface.addEventListener('bm:split:animation', async function (ev) {
 		} else {
 			throw new Error('Missing data')
 		}
-	} catch(err) {
+	} catch (err) {
 		csInterface.evalScript('$.__bodymovin.bm_bannerExporter.splitFailed()');
 	}
 })
 
 function getCompositions() {
-	let prom = new Promise(function(resolve, reject){
-		extensionLoader.then(function(){
+	let prom = new Promise(function (resolve, reject) {
+		extensionLoader.then(function () {
 			csInterface.evalScript('$.__bodymovin.bm_compsManager.updateData()');
 			resolve();
 		})
@@ -235,8 +246,8 @@ function getCompositions() {
 }
 
 function getProjectPath() {
-	let prom = new Promise(function(resolve, reject){
-		extensionLoader.then(function(){
+	let prom = new Promise(function (resolve, reject) {
+		extensionLoader.then(function () {
 			csInterface.evalScript('$.__bodymovin.bm_projectManager.getProjectPath()');
 			resolve();
 		})
@@ -245,9 +256,9 @@ function getProjectPath() {
 }
 
 function setLottiePaths(paths) {
-	return new Promise(function(resolve, reject){
-		extensionLoader.then(function(){
-			
+	return new Promise(function (resolve, reject) {
+		extensionLoader.then(function () {
+
 			var eScript = '$.__bodymovin.bm_bannerExporter.setLottiePaths(' + JSON.stringify(paths) + ')';
 			csInterface.evalScript(eScript);
 			resolve();
@@ -257,13 +268,13 @@ function setLottiePaths(paths) {
 
 function getDestinationPath(comp, alternatePath, shouldUseCompNameAsDefault) {
 	let destinationPath = ''
-	if(comp.absoluteURI) { 
+	if (comp.absoluteURI) {
 		destinationPath = comp.absoluteURI
-	} else if(alternatePath) {
+	} else if (alternatePath) {
 		const fileName = shouldUseCompNameAsDefault ? comp.name : 'data'
 		alternatePath = alternatePath.split('\\').join('\\\\')
 		alternatePath += fileName
-		if(comp.settings.export_modes.standalone) {
+		if (comp.settings.export_modes.standalone) {
 			alternatePath += '.js'
 		} else if (comp.settings.export_modes.banner && comp.settings.banner.zip_files) {
 			alternatePath += '.zip'
@@ -278,47 +289,62 @@ function getDestinationPath(comp, alternatePath, shouldUseCompNameAsDefault) {
 	} else if (comp.settings.export_modes.banner && comp.settings.banner.zip_files) {
 		extension = 'zip'
 	}
-	extensionLoader.then(function(){
-		var eScript = '$.__bodymovin.bm_compsManager.searchCompositionDestination(' + comp.id + ',"' + destinationPath+ '","' + extension + '")'
+	extensionLoader.then(function () {
+		var eScript = '$.__bodymovin.bm_compsManager.searchCompositionDestination(' + comp.id + ',"' + destinationPath + '","' + extension + '")'
 		csInterface.evalScript(eScript)
 	})
-	let prom = new Promise(function(resolve, reject){
+	let prom = new Promise(function (resolve, reject) {
+		resolve()
+	})
+	return prom
+}
+
+function getLutPath(comp, alternatePath, shouldUseCompNameAsDefault) {
+	let destinationPath = ''
+	if (comp.lutURI) {
+		destinationPath = comp.lutURI
+	}
+	extensionLoader.then(function () {
+		var eScript = '$.__bodymovin.bm_compsManager.searchCompositionLutPath(' + comp.id + ',"' + destinationPath + '")'
+		csInterface.evalScript(eScript)
+	})
+	let prom = new Promise(function (resolve, reject) {
 		resolve()
 	})
 	return prom
 }
 
 function renderNextComposition(comp) {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_compsManager.renderComposition(' + JSON.stringify(comp) + ')'
 		csInterface.evalScript(eScript)
 	})
-	let prom = new Promise(function(resolve, reject){
+	let prom = new Promise(function (resolve, reject) {
 		resolve()
 	})
 	return prom
 }
 
 function stopRenderCompositions() {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_compsManager.cancel()'
 		csInterface.evalScript(eScript)
 	})
-	let prom = new Promise(function(resolve){
+	let prom = new Promise(function (resolve) {
 		resolve()
 	})
 	return prom
 }
 
 function setFonts(fontsInfo) {
-	let prom = new Promise(function(resolve, reject){
+	let prom = new Promise(function (resolve, reject) {
 		resolve()
 	})
-	var fontsInfoString = JSON.stringify({list:fontsInfo})
+	var fontsInfoString = JSON.stringify({ list: fontsInfo })
 
-	extensionLoader.then(function(){
-	    var eScript = '$.__bodymovin.bm_renderManager.setFontData(' + fontsInfoString + ')'
-	    csInterface.evalScript(eScript)
+	extensionLoader.then(function () {
+		var eScript = '$.__bodymovin.bm_renderManager.setFontData(' + fontsInfoString + ')'
+		csInterface.evalScript(eScript)
 	})
 	return prom
 }
@@ -330,56 +356,56 @@ function openInBrowser(url) {
 
 function getPlayer(gzipped) {
 	let gzippedString = gzipped ? 'true' : 'false'
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_downloadManager.getPlayer(' + gzippedString + ')';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 }
 
 function goToFolder(path) {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_compsManager.browseFolder("' + path.split('\\').join('\\\\') + '")';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 }
 
 function riveFileSaveSuccess() {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_riveExporter.saveSuccess()';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 }
 
 function riveFileSaveFailed() {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_riveExporter.saveFailed()';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 }
 
 function getVersionFromExtension() {
-	let prom = new Promise(function(resolve, reject){
+	let prom = new Promise(function (resolve, reject) {
 		resolve()
 	})
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_renderManager.getVersion()';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 	return prom
 }
 
 function imageProcessed(result) {
-	extensionLoader.then(function(){
+	extensionLoader.then(function () {
 		var eScript = '$.__bodymovin.bm_sourceHelper.imageProcessed(';
 		eScript += result.extension === 'jpg';
 		eScript += ',';
-		if(result.encoded) {
+		if (result.encoded) {
 			eScript += '"' + result.encoded_data + '"'
 		} else {
 			eScript += 'null';
 		}
 		eScript += ')';
-	    csInterface.evalScript(eScript);
+		csInterface.evalScript(eScript);
 	})
 }
 
@@ -390,6 +416,7 @@ function initializeServer() {
 export {
 	getCompositions,
 	getDestinationPath,
+	getLutPath,
 	renderNextComposition,
 	stopRenderCompositions,
 	setFonts,

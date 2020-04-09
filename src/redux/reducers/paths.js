@@ -1,28 +1,28 @@
 import actionTypes from '../actions/actionTypes'
 
 let initialState = {
-	destinationPath: '',
+  destinationPath: '',
   previewPath: '',
   importPath: '',
 }
 
 function setDestinationPath(state, action) {
-  let newState = {...state}
-    let destinationPath = action.compositionData.destination.substring(0,action.compositionData.destination.lastIndexOf('\\') + 1)
-    newState.destinationPath = destinationPath
+  let newState = { ...state }
+  let destinationPath = action.compositionData.destination.substring(0, action.compositionData.destination.lastIndexOf('\\') + 1)
+  newState.destinationPath = destinationPath
   return newState
 }
 
 function setPreviewPath(state, action) {
-  let newState = {...state}
-  let previewPath = action.path.substring(0,action.path.lastIndexOf('\\') + 1)
+  let newState = { ...state }
+  let previewPath = action.path.substring(0, action.path.lastIndexOf('\\') + 1)
   newState.previewPath = previewPath
   return newState
 }
 
 function setImportPath(state, action) {
-  let newState = {...state}
-  let importPath = action.path.substring(0,action.path.lastIndexOf('\\') + 1)
+  let newState = { ...state }
+  let importPath = action.path.substring(0, action.path.lastIndexOf('\\') + 1)
   newState.importPath = importPath
   return newState
 }

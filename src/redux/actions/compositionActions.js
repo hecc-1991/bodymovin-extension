@@ -34,6 +34,20 @@ function getDestination(comp) {
 	}
 }
 
+function getLutPath(comp) {
+	return {
+		type: actionTypes.COMPOSITION_GET_LUTPATH,
+		comp: comp
+	}
+}
+
+function setLutPath(comp) {
+	return {
+		type: actionTypes.COMPOSITION_SET_LUTPATH,
+		comp: comp
+	}
+}
+
 function displaySettings(id) {
 	return {
 		type: actionTypes.COMPOSITION_DISPLAY_SETTINGS,
@@ -236,6 +250,8 @@ export {
 	getCompositions,
 	getDestination,
 	setDestination,
+	getLutPath,
+	setLutPath,
 	displaySettings,
 	setCurrentCompId,
 	cancelSettings,

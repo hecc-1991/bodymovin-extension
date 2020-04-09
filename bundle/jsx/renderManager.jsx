@@ -127,12 +127,12 @@ $.__bodymovin.bm_renderManager = (function () {
         }
     }
 
-    function render(comp, destination, fsDestination, compSettings) {
+    function render(comp, destination, fsDestination, compSettings, lutPath) {
 
         $.__bodymovin.bm_sourceHelper.reset();
         $.__bodymovin.bm_textShapeHelper.reset();
 
-        if(!bm_fileManager.createTemporaryFolder()) {
+        if (!bm_fileManager.createTemporaryFolder()) {
             return;
         };
 
@@ -144,27 +144,30 @@ $.__bodymovin.bm_renderManager = (function () {
         currentCompSettings = compSettings;
 
         bm_ProjectHelper.init();
-        bm_eventDispatcher.sendEvent('bm:render:update', {type: 'update', message: 'Starting Render', compId: currentCompID, progress: 0});
+        bm_eventDispatcher.sendEvent('bm:render:update', { type: 'update', message: 'Starting Render', compId: currentCompID, progress: 0 });
         destinationPath = destination;
         fsDestinationPath = fsDestination;
         bm_layerElement.reset();
         pendingLayers.length = 0;
         pendingComps.length = 0;
         var exportData = {
-            v : version_number,
-            fr : comp.frameRate,
-            ip : comp.workAreaStart * comp.frameRate,
-            op : (comp.workAreaStart + comp.workAreaDuration) * comp.frameRate,
-            w : comp.width,
-            h : comp.height,
+            v: version_number,
+            fr: comp.frameRate,
+            ip: comp.workAreaStart * comp.frameRate,
+            op: (comp.workAreaStart + comp.workAreaDuration) * comp.frameRate,
+            w: comp.width,
+            h: comp.height,
             nm: comp.name,
-            ddd : 0,
-            assets : [],
-            comps : [],
-            fonts : [],
-            layers : [],
-            markers : []
-            
+            ddd: 0,
+            assets: [],
+            comps: [],
+            fonts: [],
+            layers: [],
+            markers: [],
+            lut: {
+                p: lutPath
+            }
+
         };
         currentExportedComps.push(currentCompID);
         ob.renderData.exportData = exportData;
