@@ -1,8 +1,8 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import ImportHeader from '../../components/header/Import_header'
-import {goToComps} from '../../redux/actions/compositionActions'
+import { goToComps } from '../../redux/actions/compositionActions'
 import {
   importLottieFile,
   importLottieFileFromUrl,
@@ -11,103 +11,103 @@ import {
 } from '../../redux/actions/importActions'
 import fileImportSelector from '../../redux/selectors/file_import_selector'
 import Variables from '../../helpers/styles/variables'
-import {openInBrowser} from '../../helpers/CompositionsProvider'
+import { openInBrowser } from '../../helpers/CompositionsProvider'
 import GradientAlert from './alerts/GradientAlert'
 import RegularAlert from './alerts/RegularAlert'
 // import BaseButton from '../../components/buttons/Base_button'
 
 const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '10px 30px 30px 30px',
-      backgroundColor :'#474747',
-    },
-    body: {
-      backgroundColor: Variables.colors.gray_darkest,
-      width: '100%',
-      padding: '10px',
-      flex: '1 1 auto',
-      overflow: 'auto',
-    },
-    body_message: {
-      color: '#ffffff',
-      padding: '10px',
-      width: '100%',
-    },
-    alerts: {
-      color: '#ffffff',
-      marginTop: '10px',
-      padding: '10px 0',
-      width: '100%',
-    },
-    alert_title: {
-      fontSize: '20px',
-    },
-    alert_message: {
-      color: '#ffffff',
-      marginTop: '10px',
-      padding: '10px',
-      width: '100%',
-      border: '1px solid #ffffff',
-    },
-    alert_message_text: {
-      marginBottom: '4px',
-    },
-    alert_message_label: {
-      fontSize: '14px',
-    },
-    idle_message: {
-      color: '#ffffff',
-      marginTop: '10px',
-      padding: '10px',
-      width: '100%',
-      border: '1px solid #ffffff',
-    },
-    idle_note: {
-      fontSize: '14px',
-      lineHeight: '18px',
-      marginTop: '10px',
-    },
-    processing_message: {
-      color: '#ffffff',
-      fontSize: '12px',
-      lineHeight: '14px',
-      marginTop: '10px',
-      width: '100%',
-    },
-    processing_image_container: {
-      marginTop: '10px',
-      width: '100%',
-      textAlign:'center',
-    },
-    processing_image: {
-      maxWidth: '100%',
-    },
-    processing_cat_fact_container: {
-      padding: '20px',
-      minHeight: '40px',
-    },
-    processing_cat_fact_title: {
-      fontWeight: 900,
-      fontSize: '14px',
-      letterSpacing: '0.1px',
-      marginBottom: '4px',
-    },
-    processing_cat_fact: {
-      backgroundColor: '#fff',
-      padding: '20px 0',
-      color: Variables.colors.gray_darkest,
-      fontWeight: 900,
-      fontSize: '16px',
-      lineHeight: '18px',
-      textAlign: 'center',
-    },
-    link: {
-      color: Variables.colors.green
-    },
+  container: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '10px 30px 30px 30px',
+    backgroundColor: '#474747',
+  },
+  body: {
+    backgroundColor: Variables.colors.gray_darkest,
+    width: '100%',
+    padding: '10px',
+    flex: '1 1 auto',
+    overflow: 'auto',
+  },
+  body_message: {
+    color: '#ffffff',
+    padding: '10px',
+    width: '100%',
+  },
+  alerts: {
+    color: '#ffffff',
+    marginTop: '10px',
+    padding: '10px 0',
+    width: '100%',
+  },
+  alert_title: {
+    fontSize: '20px',
+  },
+  alert_message: {
+    color: '#ffffff',
+    marginTop: '10px',
+    padding: '10px',
+    width: '100%',
+    border: '1px solid #ffffff',
+  },
+  alert_message_text: {
+    marginBottom: '4px',
+  },
+  alert_message_label: {
+    fontSize: '14px',
+  },
+  idle_message: {
+    color: '#ffffff',
+    marginTop: '10px',
+    padding: '10px',
+    width: '100%',
+    border: '1px solid #ffffff',
+  },
+  idle_note: {
+    fontSize: '14px',
+    lineHeight: '18px',
+    marginTop: '10px',
+  },
+  processing_message: {
+    color: '#ffffff',
+    fontSize: '12px',
+    lineHeight: '14px',
+    marginTop: '10px',
+    width: '100%',
+  },
+  processing_image_container: {
+    marginTop: '10px',
+    width: '100%',
+    textAlign: 'center',
+  },
+  processing_image: {
+    maxWidth: '100%',
+  },
+  processing_cat_fact_container: {
+    padding: '20px',
+    minHeight: '40px',
+  },
+  processing_cat_fact_title: {
+    fontWeight: 900,
+    fontSize: '14px',
+    letterSpacing: '0.1px',
+    marginBottom: '4px',
+  },
+  processing_cat_fact: {
+    backgroundColor: '#fff',
+    padding: '20px 0',
+    color: Variables.colors.gray_darkest,
+    fontWeight: 900,
+    fontSize: '16px',
+    lineHeight: '18px',
+    textAlign: 'center',
+  },
+  link: {
+    color: Variables.colors.green
+  },
 })
 
 class FileImport extends React.Component {
@@ -134,7 +134,7 @@ class FileImport extends React.Component {
     }
   }
 
-  openInBrowser(){
+  openInBrowser() {
     openInBrowser('https://github.com/airbnb/lottie-web/issues')
   }
 
@@ -161,23 +161,23 @@ class FileImport extends React.Component {
   }
 
   buildAlertMessages(alerts) {
-    if(alerts && alerts.length) {
+    if (alerts && alerts.length) {
       return (
         <div className={css(styles.alerts)}>
           <div className={css(styles.alert_title)}>Alerts</div>
           <div>
-          {alerts.map((message, index) => {
-            return (
-              <div
-                key={index}
-              >
-                {this.alertTypes[message.type](message)}
-              </div>
-            )
-          })}
+            {alerts.map((message, index) => {
+              return (
+                <div
+                  key={index}
+                >
+                  {this.alertTypes[message.type](message)}
+                </div>
+              )
+            })}
           </div>
         </div>
-       )
+      )
     } else {
       return null;
     }
@@ -188,7 +188,7 @@ class FileImport extends React.Component {
       <div>
         <div>Import Finished</div>
         {this.buildAlertMessages(props.messages)}
-        
+
       </div>
     )
   }
@@ -198,7 +198,7 @@ class FileImport extends React.Component {
       <div>
         <div>Import Failed</div>
         {this.buildAlertMessages(props.messages)}
-        
+
       </div>
     )
   }
@@ -210,27 +210,27 @@ class FileImport extends React.Component {
           <span>
             Pending Commands: {props.pendingCommands}
           </span>
-          <br/>
+          <br />
           <span>
             Estimated remaining time: {Math.ceil(props.pendingCommands * 50 / 1000)} seconds
           </span>
         </div>
         <div className={css(styles.processing_message)}>
-          {!!props.image.img_src && 
+          {!!props.image.img_src &&
             <div>
               <div>
                 Here is a picture from Mars
               </div>
               <div className={css(styles.processing_image_container)}>
-                <img 
+                <img
                   className={css(styles.processing_image)}
-                  src={props.image.img_src} 
+                  src={props.image.img_src}
                   alt={'mars ' + (props.image.earth_date || '')}
                 />
               </div>
             </div>
           }
-          {!!props.fact.text && 
+          {!!props.fact.text &&
             <div>
               <div className={css(styles.processing_cat_fact_container)}>
                 <div className={css(styles.processing_cat_fact_title)}>
@@ -263,13 +263,12 @@ class FileImport extends React.Component {
     return (
       <div>
         <div className={css(styles.idle_message)}>
-          To import a lottie animation choose one of the two options above.
+          要导入lottie动画，请选择上面的两个选项之一。
         </div>
         <div className={css(styles.idle_note)}>
-          Hi! this is a first version of the Lottie importer.<br/>
-          Some things are not fully supported but most of them are working.<br/>
-          If you see anything missing, please email me the json to hernantorrisi@gmail.com<br/>
-          Or create an issue in <a className={css(styles.link)} href='#' onClick={this.openInBrowser}>Lottie on github</a>
+          你好！这是Lottie导入器的第一个版本。<br />
+          有些东西没有得到完全的支持，但是它们中的大多数都是有效的。<br />
+          如果您发现任何遗漏，请将json发送到hernantorrisi@gmail.com<br />
         </div>
       </div>
     )
@@ -283,7 +282,7 @@ class FileImport extends React.Component {
 
     return (
       <div className={css(styles.container)}>
-        <ImportHeader 
+        <ImportHeader
           onSelect={this.onLottieSelect}
           onBack={this.props.goToComps}
           onCancel={this.props.lottieProcessCancel}
@@ -298,8 +297,8 @@ class FileImport extends React.Component {
           </div>
         </div>
         <div>
+        </div>
       </div>
-    </div>
     );
   }
 

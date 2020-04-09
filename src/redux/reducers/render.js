@@ -1,7 +1,7 @@
 import actionTypes from '../actions/actionTypes'
 
 let initialState = {
-	message: '',
+  message: '',
   progress: 0,
   finished: false,
   cancelled: false,
@@ -9,72 +9,72 @@ let initialState = {
 }
 
 function updateRenderData(state, action) {
-  let newState = {...state, ...{message: action.data.message, progress: action.data.progress}}
+  let newState = { ...state, ...{ message: action.data.message, progress: action.data.progress } }
   return newState
 }
 
 function updateFontsData(state, action) {
   let fontFormData = {
     origin: 0,
-    fPath:'',
-    fClass:'',
-    fFamily:'',
-    fWeight:'',
-    fStyle:'',
-    fName:''
+    fPath: '',
+    fClass: '',
+    fFamily: '',
+    fWeight: '',
+    fStyle: '',
+    fName: ''
   }
   let fonts = []
   let item, i, len = action.data.fonts.length
-  for(i = 0; i < len; i += 1) {
+  for (i = 0; i < len; i += 1) {
     item = action.data.fonts[i]
-    fonts.push({...fontFormData,...{fFamily: item.family, fStyle: item.style, fName: item.name}})
+    fonts.push({ ...fontFormData, ...{ fFamily: item.family, fStyle: item.style, fName: item.name } })
   }
-  let newState = {...state, ...{fonts: fonts}}
+  let newState = { ...state, ...{ fonts: fonts } }
   return newState
 }
 
 function updateFontOrigin(state, action) {
   let fonts = state.fonts
   let index = fonts.indexOf(action.item)
-  let newFontData = {...fonts[index], ...{origin: action.origin}}
-  let newFonts = [...fonts.slice(0,index),newFontData,...fonts.slice(index + 1)]
-  let newState ={...state, ...{fonts: newFonts}}
+  let newFontData = { ...fonts[index], ...{ origin: action.origin } }
+  let newFonts = [...fonts.slice(0, index), newFontData, ...fonts.slice(index + 1)]
+  let newState = { ...state, ...{ fonts: newFonts } }
   return newState
 }
 
 function updateInput(state, action) {
   let fonts = state.fonts
   let index = fonts.indexOf(action.item)
-  let newFontData = {...fonts[index], ...{[action.inputName]: action.value}}
-  let newFonts = [...fonts.slice(0,index),newFontData,...fonts.slice(index + 1)]
-  let newState ={...state, ...{fonts: newFonts}}
+  let newFontData = { ...fonts[index], ...{ [action.inputName]: action.value } }
+  let newFonts = [...fonts.slice(0, index), newFontData, ...fonts.slice(index + 1)]
+  let newState = { ...state, ...{ fonts: newFonts } }
   return newState
 }
 
 function updateFontFromLocalData(state, action) {
   let fonts = state.fonts
   let storedFonts = action.storedFonts
-  if(!storedFonts){
+  if (!storedFonts) {
     return state
   }
   let len = storedFonts.length
   let i
-  let newFonts = fonts.map(function(item) {
+  let newFonts = fonts.map(function (item) {
     i = 0
-    while(i<len) {
-      if(item.fName === storedFonts[i].fName && storedFonts[i].data){
+    while (i < len) {
+      if (item.fName === storedFonts[i].fName && storedFonts[i].data) {
         return storedFonts[i].data
       }
       i += 1
     }
     return item
   })
-  let newState ={...state, ...{fonts: newFonts}}
+  let newState = { ...state, ...{ fonts: newFonts } }
   return newState
 }
 
 function finishRender(state, action) {
-  let newState ={...state, ...{finished: true, message: 'Renders Finished'}}
+  let newState = { ...state, ...{ finished: true, message: '渲染完成' } }
   return newState
 }
 
@@ -84,7 +84,7 @@ function startRender(state, action) {
 }
 
 function stopRender(state, action) {
-  let newState = {...state, ...{cancelled: true}}
+  let newState = { ...state, ...{ cancelled: true } }
   return newState
 }
 

@@ -1,10 +1,10 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import {
-  handleBannerWidthChange, 
-  handleBannerHeightChange, 
-  handleBannerVersionChange, 
+  handleBannerWidthChange,
+  handleBannerHeightChange,
+  handleBannerVersionChange,
   handleBannerOriginChange,
   handleBannerLibraryPathChange,
   handleModeToggle,
@@ -24,20 +24,20 @@ import LottieVersions from '../../helpers/LottieVersions'
 import LottieLibraryOrigins from '../../helpers/LottieLibraryOrigins'
 
 const styles = StyleSheet.create({
-    wrapper: {
-      width: '100%'
-    },
-    wrapperActive: {
-      border: '1px solid #666',
-    },
-    compsList: {
-      width: '100%',
-      flexGrow: 1,
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      padding: '10px 10px',
-      backgroundColor: '#111',
-    },
+  wrapper: {
+    width: '100%'
+  },
+  wrapperActive: {
+    border: '1px solid #666',
+  },
+  compsList: {
+    width: '100%',
+    flexGrow: 1,
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    padding: '10px 10px',
+    backgroundColor: '#111',
+  },
 })
 
 class SettingsBanner extends React.PureComponent {
@@ -45,7 +45,7 @@ class SettingsBanner extends React.PureComponent {
   handleLottieOriginChange = (value) => {
     this.props.handleBannerOriginChange(value)
   }
-  
+
   handleLottieVersionChange = (value) => {
     this.props.handleBannerVersionChange(value)
   }
@@ -104,117 +104,117 @@ class SettingsBanner extends React.PureComponent {
     })
   }
 
-	render(){ 
-		return (
-      <div className={css(styles.wrapper, this.props._isActive ? styles.wrapperActive: '')}>
+  render() {
+    return (
+      <div className={css(styles.wrapper, this.props._isActive ? styles.wrapperActive : '')}>
         <ul>
           <SettingsListItem
-            title='Banner'
-            description='Exports a bundle of files for banner usage'
+            title='横幅模式'
+            description='导出用于横幅使用的文件包'
             toggleItem={this.handleModeToggle}
             active={this.props._isActive}
           />
         </ul>
-        {this.props._isActive && 
+        {this.props._isActive &&
           <ul className={css(styles.compsList)}>
-            <SettingsListDropdown 
-              title='Lottie Library Origin'
-              description='Select where to load the library from'
+            <SettingsListDropdown
+              title='Lottie库来源'
+              description='库加载方式'
               onChange={this.handleLottieOriginChange}
               current={this.props.lottie_origin}
               options={[
-                {value:LottieLibraryOrigins.LOCAL, text: 'Locally'}, 
-                {value:LottieLibraryOrigins.CDNJS, text: 'cdnjs'}, 
-                {value:LottieLibraryOrigins.CUSTOM, text: 'Custom'}
-              ]}  
+                { value: LottieLibraryOrigins.LOCAL, text: '本地' },
+                { value: LottieLibraryOrigins.CDNJS, text: '网络' },
+                { value: LottieLibraryOrigins.CUSTOM, text: '自定义' }
+              ]}
             />
             {this.props.lottie_origin === LottieLibraryOrigins.CUSTOM &&
               <SettingsListInput
-                title='Set Location of lottie library'
-                description='Set the custom path of the lottie library'
+                title='设置lottie库位置'
+                description='设置lottie库路径'
                 value={this.props.lottie_path}
                 onChange={this.props.handleBannerLibraryPathChange}
               />
             }
             {this.props.lottie_origin !== LottieLibraryOrigins.CUSTOM &&
-              <SettingsListDropdown 
-                title='Lottie Library Version'
-                description='Select what version of the library you want to export'
+              <SettingsListDropdown
+                title='Lottie库版本'
+                description='选择库版本类型'
                 onChange={this.handleLottieVersionChange}
                 current={this.props.lottie_library}
-                options={this.buildLottieOptions()}  
+                options={this.buildLottieOptions()}
               />
             }
-            <SettingsListDropdown 
-              title='Lottie Renderer'
-              description='Select what renderer to use'
+            <SettingsListDropdown
+              title='Lottie渲染器'
+              description='选择使用的渲染器'
               onChange={this.props.lottieBannerRendererUpdated}
               current={this.props.lottie_renderer}
-              options={this.buildRendererOptions()}  
+              options={this.buildRendererOptions()}
             />
             <SettingsListInput
-              title='Set Click tag value'
-              description='Set the Click tag value'
+              title='设置点击标签值'
+              description='设置点击标签值'
               value={this.props.click_tag}
               onChange={this.props.handleBannerLibraryClickTagChange}
             />
-            <SettingsListItem 
-              title='Use composition size'
-              description='Uncheck for setting custom banner width and height'
+            <SettingsListItem
+              title='使用合成尺寸'
+              description='不检查设置自定义横幅宽度和高度'
               toggleItem={this.props.handleCustomSizeFlagChange}
-              active={this.props.use_original_sizes}  />
-            {!this.props.use_original_sizes && 
+              active={this.props.use_original_sizes} />
+            {!this.props.use_original_sizes &&
               <span>
-                <SettingsListItem 
-                  title='Width'
-                  description='Banner Width'
-                  active={true} 
-                  needsInput={true} 
-                  inputValue={this.props.width} 
-                  inputValueChange={this.handleBannerWidthChange} 
+                <SettingsListItem
+                  title='宽'
+                  description='横幅宽'
+                  active={true}
+                  needsInput={true}
+                  inputValue={this.props.width}
+                  inputValueChange={this.handleBannerWidthChange}
                 />
-                <SettingsListItem 
-                  title='Height'
-                  description='Banner Height'
-                  active={true} 
-                  needsInput={true} 
-                  inputValue={this.props.height} 
-                  inputValueChange={this.handleBannerHeightChange} 
+                <SettingsListItem
+                  title='高'
+                  description='横幅高'
+                  active={true}
+                  needsInput={true}
+                  inputValue={this.props.height}
+                  inputValueChange={this.handleBannerHeightChange}
                 />
               </span>
             }
-            <SettingsListItem 
-              title='Zip Files'
-              description='Select if you want to zip banner files'
+            <SettingsListItem
+              title='Zip 文件'
+              description='将横幅文件打包'
               toggleItem={this.props.handleZipFilesChange}
-              active={this.props.zip_files}  />
-            <SettingsListItem 
-              title='Inline animation data in template'
-              description='Select if you want to json data be part of the template'
+              active={this.props.zip_files} />
+            <SettingsListItem
+              title='动画数据嵌入模板中'
+              description='json数据成为模板的一部分'
               toggleItem={this.props.handleIncludeDataInTemplateChange}
-              active={this.props.shouldIncludeAnimationDataInTemplate}  />
-            <SettingsListItem 
-              title='Loop'
-              description='Select if you want the animation to loop indefinitely'
+              active={this.props.shouldIncludeAnimationDataInTemplate} />
+            <SettingsListItem
+              title='循环'
+              description='动画将循环播放'
               toggleItem={this.props.handleLoopToggleChange}
-              active={this.props.shouldLoop}  />
-              { !this.props.shouldLoop &&
+              active={this.props.shouldLoop} />
+            {!this.props.shouldLoop &&
 
-                <SettingsListItem 
-                  title='Loop Count'
-                  description='Select number of loops'
-                  active={true} 
-                  needsInput={true} 
-                  inputValue={this.props.loopCount} 
-                  inputValueChange={this.handleLoopCountChange} 
-                />
+              <SettingsListItem
+                title='循环次数'
+                description='设置循环次数'
+                active={true}
+                needsInput={true}
+                inputValue={this.props.loopCount}
+                inputValueChange={this.handleLoopCountChange}
+              />
 
-              }
+            }
           </ul>
         }
       </div>
     )
-	}
+  }
 }
 
 function mapStateToProps(state) {
