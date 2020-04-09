@@ -410,7 +410,7 @@ function imageProcessed(result) {
 }
 
 function initializeServer() {
-	csInterface.requestOpenExtension("com.bodymovin.bodymovin_server", "");
+	csInterface.requestOpenExtension("com.tutucloud.export_server", "");
 }
 
 export {
