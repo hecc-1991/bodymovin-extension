@@ -61,11 +61,9 @@ $.__bodymovin.bm_lutHelper = (function () {
         lut.assets = [];
 
         var i;
-        alert(lutSources.length);
         for (i = 0; i < lutSources.length; i += 1) {
             var currentSourceData = lutSources[i];
             var oriFile = new File(lutPath + '/' + currentSourceData.name);
-            alert(oriFile.fullName);
             var colorTableName = 'lut_' + i + '.cube';
             var currentSavingAsset = {
                 ty: 5,
