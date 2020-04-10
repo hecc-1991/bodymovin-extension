@@ -10,7 +10,7 @@ $.__bodymovin.bm_lutHelper = (function () {
     色表特效
      */
     function lutEffect(elem, effectType) {
-
+        var layerName = elem.name;
         var i, len = elem.numProperties, prop;
         for (i = 0; i < len; i += 1) {
             prop = elem.property(i + 1);
@@ -20,6 +20,7 @@ $.__bodymovin.bm_lutHelper = (function () {
                 var colorTableName = ret[1];
                 lutSources.push({
                     name: colorTableName,
+                    layerName: layerName,
                     id: 'color_' + lutCount,
                 });
                 return lutSources[lutSources.length - 1].id;
@@ -70,7 +71,8 @@ $.__bodymovin.bm_lutHelper = (function () {
                 id: currentSourceData.id,
                 u: 'luts/',
                 p: colorTableName,
-                src: currentSourceData.name
+                src: currentSourceData.name,
+                nm: currentSourceData.layerName
             };
 
             lut.push(currentSavingAsset);
