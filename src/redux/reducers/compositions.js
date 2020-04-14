@@ -42,7 +42,7 @@ let defaultComposition = {
     ignore_expression_properties: false,
     export_old_format: false,
     skip_default_properties: false,
-    not_supported_properties: false,
+    not_supported_properties: true,
     export_mode: ExportModes.STANDARD,
     export_modes: {
       standard: true,

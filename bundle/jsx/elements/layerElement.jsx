@@ -191,11 +191,9 @@ $.__bodymovin.bm_layerElement = (function () {
         layerData.ip = layerInfo.inPoint * frameRate;
         layerData.op = layerInfo.outPoint * frameRate;
         layerData.st = layerInfo.startTime * frameRate;
-        if ($.__bodymovin.bm_renderManager.shouldIncludeNotSupportedProperties()) {
-            layerData.cp = layerInfo.collapseTransformation;
-            if (layerInfo.motionBlur) {
-                layerData.mb = true;
-            }
+        layerData.cp = layerInfo.collapseTransformation;
+        if (layerInfo.motionBlur) {
+            layerData.mb = true;
         }
         layerData.bm = bm_blendModes.getBlendMode(layerInfo.blendingMode);
 

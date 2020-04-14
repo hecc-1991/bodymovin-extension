@@ -188,7 +188,7 @@ $.__bodymovin.bm_renderManager = (function () {
     }
 
     function exportMotionBlur(exportData, comp) {
-        if (comp.motionBlur && shouldIncludeNotSupportedProperties()) {
+        if (comp.motionBlur) {
             exportData.mb = {
                 sa: comp.shutterAngle,
                 sp: comp.shutterPhase,

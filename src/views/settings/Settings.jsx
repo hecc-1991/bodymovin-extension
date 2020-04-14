@@ -296,11 +296,6 @@ class Settings extends React.PureComponent {
                 description='注意！如果你不是在使用最新版的 安卓、iOS、或者 Web 客户端库，请不要勾选这个选项。'
                 toggleItem={this.toggleSkipDefaultProperties}
                 active={this.props.settings ? this.props.settings.skip_default_properties : false} />
-              <SettingsListItem
-                title='包含不被 Lottie 支持的属性'
-                description='如果需要导出不被 Lottie 官方支持的属性（用以自己实现支持），可以勾选这个选项。'
-                toggleItem={this.toggleNotSupportedProperties}
-                active={this.props.settings ? this.props.settings.not_supported_properties : false} />
             </SettingsCollapsableItem>
           </ul>
           <div className={css(styles.bottomNavigation)}>
