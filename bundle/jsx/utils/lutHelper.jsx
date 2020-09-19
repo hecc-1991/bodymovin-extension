@@ -4,18 +4,23 @@ $.__bodymovin.bm_lutHelper = (function () {
 
     var lutSources = [];
     var lutCount = 0;
-    var REG_LUT = /^使用:\s((.)+)/g;
+    
+	
+	function matchLut(str){
+		var REG_LUT = /^使用:\s(.+)/g;
+		return REG_LUT.exec(str);
+	}
 
     /*
     色表特效
      */
     function lutEffect(elem, effectType) {
+		
         var layerName = elem.name;
         var i, len = elem.numProperties, prop;
         for (i = 0; i < len; i += 1) {
             prop = elem.property(i + 1);
-
-            var ret = REG_LUT.exec(prop.name);
+            var ret = matchLut(prop.name);
             if (ret && ret.length > 1) {
                 var colorTableName = ret[1];
                 lutSources.push({
@@ -23,6 +28,7 @@ $.__bodymovin.bm_lutHelper = (function () {
                     layerName: layerName,
                     id: 'color_' + lutCount,
                 });
+				lutCount++;
                 return lutSources[lutSources.length - 1].id;
             }
         }
@@ -58,9 +64,9 @@ $.__bodymovin.bm_lutHelper = (function () {
         if (!folder.exists) {
             folder.create();
         }
-
+		
         lut.assets = [];
-
+		
         var i;
         for (i = 0; i < lutSources.length; i += 1) {
             var currentSourceData = lutSources[i];
@@ -74,9 +80,9 @@ $.__bodymovin.bm_lutHelper = (function () {
                 src: currentSourceData.name,
                 nm: currentSourceData.layerName
             };
-
+			
             lut.push(currentSavingAsset);
-
+			
             //save lut
             if (oriFile.exists) {
                 oriFile.copy(folder.absoluteURI + '/' + currentSavingAsset.p);
