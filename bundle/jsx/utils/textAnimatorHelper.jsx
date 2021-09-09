@@ -13,18 +13,23 @@ $.__bodymovin.bm_textAnimatorHelper = (function () {
         function exportSelector(selectorProperty) {
             if (!selectorProperty) return;
 
+            if(!selectorProperty.active)return;
+
             var ob = {};
             var advancedProperty = selectorProperty.property('ADBE Text Range Advanced');
             ob.t = 0;
+			
+			var rangeUnits = advancedProperty.property('ADBE Text Range Units').value;
+			ob.r = rangeUnits;
+			ob.b = advancedProperty.property("ADBE Text Range Type2").value;
+			ob.m = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Selector Mode'), frameRate, stretch);
+            ob.a = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Selector Max Amount'), frameRate, stretch);
+            ob.sh = advancedProperty.property("ADBE Text Range Shape").value;
+            ob.sm = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Selector Smoothness'), frameRate, stretch);
             ob.xe = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Levels Max Ease'), frameRate, stretch);
             ob.ne = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Levels Min Ease'), frameRate, stretch);
-            ob.a = bm_keyframeHelper.exportKeyframes(advancedProperty.property('ADBE Text Selector Max Amount'), frameRate, stretch);
-            ob.b = advancedProperty.property("ADBE Text Range Type2").value;
             ob.rn = advancedProperty.property("ADBE Text Randomize Order").value;
-            ob.sh = advancedProperty.property("ADBE Text Range Shape").value;
-
-            // 
-            var rangeUnits = advancedProperty.property('ADBE Text Range Units').value;
+            
             if (rangeUnits === 1) {
                 if (selectorProperty.property('ADBE Text Percent Start').isModified) {
                     ob.s = bm_keyframeHelper.exportKeyframes(selectorProperty.property('ADBE Text Percent Start'), frameRate, stretch);
@@ -44,7 +49,8 @@ $.__bodymovin.bm_textAnimatorHelper = (function () {
                     ob.o = bm_keyframeHelper.exportKeyframes(selectorProperty.property('ADBE Text Index Offset'), frameRate, stretch);
                 }
             }
-            ob.r = rangeUnits;
+            
+
 
             selectors.push(ob);
         }
@@ -73,7 +79,7 @@ $.__bodymovin.bm_textAnimatorHelper = (function () {
             }
         }
 
-        if (selectors.length == 0) {
+        /*if (selectors.length == 0) {
             // Always export a full range selector, when no explicit selectors are present.
             selectors.push({
                 t: 0,
@@ -86,7 +92,7 @@ $.__bodymovin.bm_textAnimatorHelper = (function () {
                 e: { k: 100 },
                 o: { k: 0 }
             });
-        }
+        }*/
 
         var export_array = selectors.length > 1;
 
@@ -177,7 +183,7 @@ $.__bodymovin.bm_textAnimatorHelper = (function () {
     function exportAnimator(layerInfo, ob, frameRate, stretch) {
         var i, len;
         len = layerInfo.numProperties;
-
+		
         ob.nm = layerInfo.name;
         for (i = 0; i < len; i += 1) {
             switch (layerInfo.property(i + 1).matchName) {

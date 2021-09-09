@@ -285,7 +285,7 @@ $.__bodymovin.bm_textShapeHelper = (function () {
 			saveFontFileToFolder(fonts.list[i].fPath,path,fonts.list[i].fName);
 		}
 
-        fontComp.openInViewer();
+        //fontComp.openInViewer();
         var i, len = fonts.list.length, rect, baseLineShift;
         var fontProp = boxText.property("Source Text");
         var fontDocument = fontProp.value;

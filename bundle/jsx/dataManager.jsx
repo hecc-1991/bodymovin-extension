@@ -47,11 +47,13 @@ $.__bodymovin.bm_dataManager = (function () {
             if (layers[i].ty === layerTypes.precomp && layers[i].compId) {
                 comps.push({
                     id: layers[i].compId,
-                    layers: layers[i].layers
+                    layers: layers[i].layers,
+                    mb: layers[i].mb
                 });
                 separateComps(layers[i].layers, comps);
                 delete layers[i].compId;
                 delete layers[i].layers;
+                delete layers[i].mb;
             }
         }
     }
@@ -73,7 +75,7 @@ $.__bodymovin.bm_dataManager = (function () {
             delete layers[i].isGuide;
             delete layers[i].isAdjustment;
             delete layers[i].render;
-            delete layers[i].enabled;
+            //delete layers[i].enabled;
             if (layers[i].ty === layerTypes.precomp && layers[i].layers) {
                 deleteLayerParams(layers[i].layers);
             }

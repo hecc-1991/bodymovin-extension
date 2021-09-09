@@ -54,50 +54,13 @@ $.__bodymovin.bm_textHelper = (function () {
                 time = sourceTextProp.keyTime(j + 1);
                 textDocument = sourceTextProp.keyValue(j + 1);
             }
-            if (textDocument.boxText) {
-                ob.sz = textDocument.boxTextSize;
-                ob.ps = textDocument.boxTextPos;
-            }
+
             var i, len;
-            ob.s = textDocument.fontSize;
+            ob.nm = duplicatedLayerInfo.name;
+            ob.t = textDocument.text;
+
             ob.f = textDocument.font;
-			ob.nm = duplicatedLayerInfo.name;
-			ob.le = textDocument.leading;
-			ob.fb = textDocument.fauxBold;
-			ob.fi = textDocument.fauxItalic;
-			ob.ac = textDocument.allCaps;
-			ob.sa = textDocument.smallCaps;
-			ob.sp = textDocument.superscript;
-			ob.sb = textDocument.subscript;
-			ob.hs = textDocument.horizontalScale;
-			ob.vs = textDocument.verticalScale;
-            $.__bodymovin.bm_sourceHelper.addFont(textDocument.font, textDocument.fontFamily, textDocument.fontStyle);
-            if(textDocument.allCaps){
-                ob.t = textDocument.text.toUpperCase();
-            } else {
-                ob.t = textDocument.text;
-            }
-            len = ob.t.length;
-            ob.j = getJustification(textDocument.justification);
-            ob.tr = textDocument.tracking;
-            if(textDocument.baselineLocs && textDocument.baselineLocs.length > 5){
-                if(textDocument.baselineLocs[5] > textDocument.baselineLocs[1]){
-                    ob.lh = textDocument.baselineLocs[5] - textDocument.baselineLocs[1];
-                    // Fix when there is an empty newLine between first and second line. AE return an extremely large number.
-                    if(ob.lh > 10000) {
-                        ob.lh = ob.s*1.2;
-                    }
-                } else {
-                    ob.lh = ob.s*1.2;
-                }
-            } else {
-                ob.lh = ob.s*1.2;
-            }
-            if(textDocument.baselineShift){
-                ob.ls = textDocument.baselineShift;
-            } else {
-                ob.ls = 0;
-            }
+
             if (textDocument.applyFill) {
                 len = textDocument.fillColor.length;
                 ob.fc = [];
@@ -105,6 +68,7 @@ $.__bodymovin.bm_textHelper = (function () {
                     ob.fc[i] = Math.round(1000 * textDocument.fillColor[i]) / 1000;
                 }
             }
+
             if (textDocument.applyStroke) {
                 len = textDocument.strokeColor.length;
                 ob.sc = [];
@@ -116,6 +80,52 @@ $.__bodymovin.bm_textHelper = (function () {
                     ob.of = textDocument.strokeOverFill;
                 }
             }
+
+            ob.s = textDocument.fontSize;
+            ob.le = textDocument.leading;
+            ob.tr = textDocument.tracking;
+
+			ob.vs = textDocument.verticalScale;
+            ob.hs = textDocument.horizontalScale;
+
+            ob.ls = textDocument.baselineShift;
+            ob.ts = textDocument.tsume;
+
+			ob.fb = textDocument.fauxBold;
+			ob.fi = textDocument.fauxItalic;
+			ob.ac = textDocument.allCaps;
+			ob.sa = textDocument.smallCaps;
+			ob.sp = textDocument.superscript;
+			ob.sb = textDocument.subscript;
+			
+			
+            $.__bodymovin.bm_sourceHelper.addFont(textDocument.font, textDocument.fontFamily, textDocument.fontStyle,textDocument.fontLocation);
+            //if(textDocument.allCaps){
+            //    ob.t = textDocument.text.toUpperCase();
+            //} else {
+            //    ob.t = textDocument.text;
+            //}
+            ob.j = getJustification(textDocument.justification);
+
+            if (textDocument.boxText) {
+                ob.ps = textDocument.boxTextPos;
+                ob.sz = textDocument.boxTextSize;
+            }
+            
+            //if(textDocument.baselineLocs && textDocument.baselineLocs.length > 5){
+            //    if(textDocument.baselineLocs[5] > textDocument.baselineLocs[1]){
+            //        ob.lh = textDocument.baselineLocs[5] - textDocument.baselineLocs[1];
+            //        // Fix when there is an empty newLine between first and second line. AE return an extremely large number.
+            //        if(ob.lh > 10000) {
+            //            ob.lh = ob.s*1.2;
+            //        }
+            //    } else {
+            //        ob.lh = ob.s*1.2;
+            //    }
+            //} else {
+            //    ob.lh = ob.s*1.2;
+            //}
+
             //TODO check if it need to be multiplied by stretch
             arr.push({s:ob,t:time*frameRate});
         }
@@ -151,15 +161,20 @@ $.__bodymovin.bm_textHelper = (function () {
     }
     
     function exportTextPathData(pathOptions, ob, masksProperties, frameRate, stretch) {
-        if (pathOptions.property("Path").value !== 0) {
+				
+        if (pathOptions.active && pathOptions.property("Path").value !== 0) {
             masksProperties[pathOptions.property("Path").value - 1].mode = 'n';
             ob.m = pathOptions.property("Path").value - 1;
             ob.f = bm_keyframeHelper.exportKeyframes(pathOptions.property("First Margin"), frameRate, stretch);
             ob.l = bm_keyframeHelper.exportKeyframes(pathOptions.property("Last Margin"), frameRate, stretch);
-            ob.a = pathOptions.property("Force Alignment").value;
-            ob.p = pathOptions.property("Perpendicular To Path").value;
-            ob.r = pathOptions.property("Reverse Path").value;
+            ob.a = bm_keyframeHelper.exportKeyframes(pathOptions.property("Force Alignment"), frameRate, stretch);
+            ob.p = bm_keyframeHelper.exportKeyframes(pathOptions.property("Perpendicular To Path"), frameRate, stretch);
+            ob.r = bm_keyframeHelper.exportKeyframes(pathOptions.property("Reverse Path"), frameRate, stretch);
+					
+			return true;
         }
+		
+		return false;
     }
     
     function exportMoreOptionsData(pathOptions, ob, frameRate, stretch) {
@@ -172,6 +187,8 @@ $.__bodymovin.bm_textHelper = (function () {
         var i, len = layerInfo.numProperties;
         for (i = 0; i < len; i += 1) {
             if (layerInfo.property(i + 1).matchName === "ADBE Text Animator") {
+				if(!layerInfo.property(i + 1).active)
+					continue;
                 var animatorOb = {};
                 bm_textAnimatorHelper.exportAnimator(layerInfo.property(i + 1), animatorOb, frameRate, stretch);
                 animatorArr.push(animatorOb);
@@ -202,7 +219,8 @@ $.__bodymovin.bm_textHelper = (function () {
         for (i = 0; i < len; i += 1) {
             switch (textProperty(i + 1).matchName) {
             case "ADBE Text Path Options":
-                exportTextPathData(textProperty(i + 1), layerOb.t.p, layerOb.masksProperties, frameRate, stretch);
+				var ret = exportTextPathData(textProperty(i + 1), layerOb.t.p, layerOb.masksProperties, frameRate, stretch);
+				if(!ret) delete layerOb.t.p;
                 break;
             case "ADBE Text More Options":
                 exportMoreOptionsData(textProperty(i + 1), layerOb.t.m, frameRate, stretch);

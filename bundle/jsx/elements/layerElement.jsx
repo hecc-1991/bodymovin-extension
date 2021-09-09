@@ -26,7 +26,7 @@ $.__bodymovin.bm_layerElement = (function () {
         var layerType = getLayerType(layerInfo);
 
 
-        if (layerType === layerTypes.light || layerType === layerTypes.adjustment || layerType === layerTypes.pholderStill || layerType === layerTypes.pholderVideo) {
+        if (layerType === layerTypes.light || layerType === layerTypes.pholderStill || layerType === layerTypes.pholderVideo) {
             layerData.isValid = false;
             layerData.render = false;
         }
@@ -46,7 +46,7 @@ $.__bodymovin.bm_layerElement = (function () {
             layerData.ddd = 0;
         }
         layerData.ind = layerInfo.index;
-        layerData.ty = layerType === layerTypes.adjustment ? layerTypes.nullLayer : layerType;
+        layerData.ty = layerType;
         layerData.isAdjustment = layerType === layerTypes.adjustment;
         layerData.nm = layerInfo.name;
         var layerAttributes = bm_generalUtils.findAttributes(layerInfo.name);
@@ -187,13 +187,16 @@ $.__bodymovin.bm_layerElement = (function () {
             bm_imageSeqHelper.exportStills(layerInfo, layerData, frameRate);
         } else if (lType === layerTypes.camera) {
             bm_cameraHelper.exportCamera(layerInfo, layerData, frameRate);
+        }else if(lType === layerTypes.adjustment){
+            layerData.sw = layerInfo.source.width;
+            layerData.sh = layerInfo.source.height;
         }
         layerData.ip = layerInfo.inPoint * frameRate;
         layerData.op = layerInfo.outPoint * frameRate;
         layerData.st = layerInfo.startTime * frameRate;
         layerData.cp = layerInfo.collapseTransformation;
         if (layerInfo.motionBlur) {
-            layerData.mb = true;
+            layerData.hasmb = true;
         }
         layerData.bm = bm_blendModes.getBlendMode(layerInfo.blendingMode);
 

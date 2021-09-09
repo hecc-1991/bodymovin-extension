@@ -818,10 +818,11 @@ $.__bodymovin.bm_sourceHelper = (function () {
 		return "";		
 	}
 	
-    function addFont(fontName, fontFamily, fontStyle) {
+    function addFont(fontName, fontFamily, fontStyle,fontLocation) {
         var i = 0, len = fonts.length;
         while (i < len) {
-            if (fonts[i].name === fontName && fonts[i].family === fontFamily && fonts[i].style === fontStyle) {
+            
+            if (fonts[i].name == fontName && fonts[i].family == fontFamily && fonts[i].style == fontStyle) {
                 return;
             }
             i += 1;
@@ -829,7 +830,8 @@ $.__bodymovin.bm_sourceHelper = (function () {
         fonts.push({
             name: fontName,
             family: fontFamily,
-            style: fontStyle
+            style: fontStyle,
+            location: fontLocation
         }
                   );
     }

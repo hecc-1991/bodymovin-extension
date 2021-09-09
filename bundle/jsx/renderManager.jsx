@@ -12,11 +12,12 @@ $.__bodymovin.bm_renderManager = (function () {
     var bm_ProjectHelper = $.__bodymovin.bm_ProjectHelper;
     var bm_fileManager = $.__bodymovin.bm_fileManager;
     var bm_lutHelper = $.__bodymovin.bm_lutHelper;
-
+    var bm_generalUtils = $.__bodymovin.bm_generalUtils;
+    
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
     var version_number = '5.6.10';
-    var version_tutu_number = '2.2.6';
+    var version_tutu_number = '2.3.0';
 
     var _lutPath;
 
@@ -117,11 +118,16 @@ $.__bodymovin.bm_renderManager = (function () {
         for (i = 0; i < len; i += 1) {
             layerData = layers[i];
             layerInfo = comp.layers[i + 1];
+            
             bm_layerElement.checkLayerSource(layerInfo, layerData, framerate);
             if (layerData.ty === layerTypes.text) {
                 $.__bodymovin.bm_textShapeHelper.addComps();
             }
             if (layerData.ty === layerTypes.precomp && layerData.render !== false && layerData.compId) {
+                
+                var compLayer = bm_projectManager.getCompositionById(layerInfo.source.id);
+                exportMotionBlur(layerData,compLayer);
+
                 currentExportedComps.push(layerData.compId);
                 if (deepTraversing) {
                     layerData.layers = [];
@@ -167,6 +173,7 @@ $.__bodymovin.bm_renderManager = (function () {
             h: comp.height,
             nm: comp.name,
             ddd: 0,
+            bgc: bm_generalUtils.arrayRgbToHex(comp.bgColor),
             assets: [],
             comps: [],
             fonts: [],
@@ -353,7 +360,24 @@ $.__bodymovin.bm_renderManager = (function () {
                 $.__bodymovin.bm_textShapeHelper.exportChars(fontsInfo);
             } else {
                 exportData = ob.renderData.exportData;
-                bm_eventDispatcher.sendEvent('bm:render:fonts', { type: 'save', compId: currentCompID, fonts: fonts });
+                //bm_eventDispatcher.sendEvent('bm:render:fonts', { type: 'save', compId: currentCompID, fonts: fonts });
+                var fDatas = {};
+                fDatas.list = [];
+                var j;
+                for (j = 0; j < fonts.length; j++) {
+                    var elem = fonts[j];
+                    fDatas.list[j] = {
+                        origin: 0,
+                        fPath: elem.location,
+                        fClass:"",
+                        fFamily: elem.family,
+                        fWeight:"",
+                        fStyle: elem.style,
+                        fName: elem.name
+                    };
+                    
+                }
+                setFontData(fDatas)
             }
         }
     }
