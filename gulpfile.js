@@ -11,7 +11,8 @@ var insert = require('gulp-insert');
 var version = '5.6.10'
 
 var extensionSource = './bundle';
-var extensionDestination = '../../../tropi/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+var extensionDestination = 'C:/Users/hcc/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+//var extensionDestination = 'C:/Program Files (x86)/Common Files/Adobe/CEP/extensions';
 gulp.task('watch-extension', function () {
     gulp.src(extensionSource + '/**/*', { base: extensionSource })
         .pipe(watch(extensionSource, { base: extensionSource }))

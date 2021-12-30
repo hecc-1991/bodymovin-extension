@@ -135,23 +135,23 @@ class CompositionsListItem extends React.Component {
         <BodymovinCheckbox animationData={checkbox} animate={this.props.item.selected} autoplay={false} loop={false} >
           <button className={css(styles.item, styles.radio)} onClick={this.toggleItem}></button>
         </BodymovinCheckbox>
-        <BodymovinSettings animationData={settings} animate={this.state.settingsHovered} autoplay={false} loop={false} >
+        {/* <BodymovinSettings animationData={settings} animate={this.state.settingsHovered} autoplay={false} loop={false} >
           <button
             className={css(styles.item, styles.settings)}
             onClick={this.showSettings}
             onMouseEnter={this.settingsHovered}
             onMouseLeave={this.settingsLeft}>
           </button>
-        </BodymovinSettings>
+        </BodymovinSettings> */}
         <div className={css(styles.item, styles.name, textEllipsis)} title={this.props.item.name}>{this.props.item.name}</div>
 
-        {this.props.item.lutPath
+        {/* {this.props.item.lutPath
           && <div className={css(styles.item, styles.lutPath, textEllipsis)} onClick={this.selectLutPath} title={this.props.item.lutPath}>{this.props.item.lutPath}</div>}
         {!this.props.item.lutPath && <div className={css(styles.item, styles.lutPlaceholder)}>
           <button className={css(styles.btnLut)} onClick={this.selectLutPath} >设置色表路径</button>
-        </div>}
+        </div>} */}
 
-
+        
         {this.props.item.destination
           && <div className={css(styles.item, styles.destination, textEllipsis)} onClick={this.selectDestination} title={this.props.item.destination}>{this.props.item.destination}</div>}
         {!this.props.item.destination && <div className={css(styles.item, styles.destinationPlaceholder)}>

@@ -80,7 +80,6 @@ class CompositionsListHeader extends React.Component {
     return (
       <ul className={css(styles.container)}>
         <li className={css(styles.item, styles.radio, textEllipsis)}>已选择</li>
-        <li className={css(styles.item, styles.settings, textEllipsis)}>设置</li>
         <li className={css(styles.item, styles.name, textEllipsis)}>
           <div className={css(styles.nameBox)}>
             <input className={css(styles.name_input)} type="text" placeholder="图层名称" onChange={this.props.filterChange} value={this.props.filterValue} />
@@ -91,16 +90,6 @@ class CompositionsListHeader extends React.Component {
         <li
           className={css(styles.item, styles.destination, textEllipsis)}
         >
-          <div className={css(styles.itemCompName)}>
-            <input
-              type="checkbox"
-              onChange={this.props.onCompNameAsDefaultToggle}
-              checked={this.props.shouldUseCompNameAsDefault}
-              className={css(styles.itemCompNameInput)}
-            />
-            <span>使用合成名称</span>
-          </div>
-          <div>../输出目录</div>
         </li>
       </ul>
     );

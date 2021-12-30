@@ -111,11 +111,6 @@ class Compositions extends React.Component {
 					onClick={this.props.toggleShowSelected}>
 					{this.props.showOnlySelected ? '显示所有合成层' : '显示选中的合成层'}
 				</div>
-				<div
-					className={css(styles.toggleButton)}
-					onClick={this.props.applySettingsToSelectedComps}>
-					{'将保存的设置应用到所选合成'}
-				</div>
 			</div>
 		)
 	}
