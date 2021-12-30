@@ -206,7 +206,7 @@ $.__bodymovin.bm_textHelper = (function () {
         exportTextDocumentData(layerInfo, layerOb.t.d, frameRate, stretch);
 		if(layerOb.t.d.x){
 			var matchinfo = layerOb.t.d.x.match(/\.layer\S*\)\.text\.sourceText/);
-			if(matchinfo.length){
+			if(matchinfo != null && matchinfo.length){
 				layerOb.nm = matchinfo[0].replace(".layer('","").replace("').text.sourceText","");
 				var text_data = $.__bodymovin.bm_sourceHelper.searchText(layerOb.nm);
 				layerOb.refId = text_data.id;

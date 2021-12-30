@@ -17,7 +17,7 @@ $.__bodymovin.bm_renderManager = (function () {
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
     var version_number = '5.6.10';
-    var version_tutu_number = '2.3.0';
+    var version_tutu_number = '2.3.1';
 
     var _lutPath;
 
