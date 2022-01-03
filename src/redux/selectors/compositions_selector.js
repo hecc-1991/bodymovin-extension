@@ -29,7 +29,12 @@ function checkRenderable(items, list) {
 	let canRender = list.some((id, val) => {
       return items[id].selected && items[id].destination
   	})
-  	return canRender
+
+  let selected = list.filter((id, val) => {
+      return items[id].selected;
+  	})
+
+  return canRender && selected.length == 1
 
 }
 

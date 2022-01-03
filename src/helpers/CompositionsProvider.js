@@ -42,6 +42,17 @@ csInterface.addEventListener('bm:render:start', function (ev) {
 	//console.log('STARTED RENDER')
 })
 
+csInterface.addEventListener('bm:render:unsupport', function (ev) {
+	if (ev.data) {
+		let data = (typeof ev.data === "string") ? JSON.parse(ev.data) : ev.data
+		dispatcher({
+			type: actions.RENDER_UNSUPPORT,
+			data: data
+		})
+	} else {
+	}
+})
+
 csInterface.addEventListener('console:log', function (ev) {
 	console.log('LOGGING:', ev.data)
 	dispatcher({

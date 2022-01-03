@@ -5,11 +5,18 @@ let initialState = {
   progress: 0,
   finished: false,
   cancelled: false,
-  fonts: []
+  fonts: [],
+  unSupportElem: []
+
 }
 
 function updateRenderData(state, action) {
   let newState = { ...state, ...{ message: action.data.message, progress: action.data.progress } }
+  return newState
+}
+
+function updateUnSupportElem(state, action) {
+  let newState = { ...state, ...{ unSupportElem: action.data } }
   return newState
 }
 
@@ -92,6 +99,8 @@ export default function compositions(state = initialState, action) {
   switch (action.type) {
     case actionTypes.RENDER_UPDATE:
       return updateRenderData(state, action)
+    case actionTypes.RENDER_UNSUPPORT:
+      return updateUnSupportElem(state, action)
     case actionTypes.RENDER_START:
       return startRender(state, action)
     case actionTypes.RENDER_STOP:

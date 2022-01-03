@@ -16,6 +16,7 @@ $.__bodymovin.bm_layerElement = (function () {
     var bm_textHelper = $.__bodymovin.bm_textHelper;
     var bm_imageSeqHelper = $.__bodymovin.bm_imageSeqHelper;
     var bm_blendModes = $.__bodymovin.bm_blendModes;
+    var bm_SupportElemChecker = $.__bodymovin.bm_SupportElemChecker;
 
     var completeCallback;
 
@@ -148,11 +149,14 @@ $.__bodymovin.bm_layerElement = (function () {
         }
     }
 
-    function renderLayer(layerOb, includeHiddenData, callback) {
+    function renderLayer(layerOb, includeHiddenData, callback,unSupportElem) {
         var layerInfo = layerOb.layer;
         var layerData = layerOb.data;
         var frameRate = layerOb.framerate;
         completeCallback = callback;
+
+        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo.name,layerInfo.enabled);
+
         if (layerData.render === false) {
             completeCallback();
             return;

@@ -3,6 +3,10 @@
 
 $.__bodymovin.bm_renderManager = (function () {
     'use strict';
+
+    var version_number = '5.6.10';
+    var version_tutu_number = '2.3.1';
+
     var bm_eventDispatcher = $.__bodymovin.bm_eventDispatcher;
     var bm_projectManager = $.__bodymovin.bm_projectManager;
     var bm_compsManager = $.__bodymovin.bm_compsManager;
@@ -16,8 +20,9 @@ $.__bodymovin.bm_renderManager = (function () {
     
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
-    var version_number = '5.6.10';
-    var version_tutu_number = '2.3.1';
+
+    var unSupportElem = [];
+    var unSupportElemSend = false;
 
     var _lutPath;
 
@@ -141,6 +146,9 @@ $.__bodymovin.bm_renderManager = (function () {
         $.__bodymovin.bm_sourceHelper.reset();
         $.__bodymovin.bm_textShapeHelper.reset();
         bm_lutHelper.reset();
+
+        unSupportElem = [];
+        unSupportElemSend = false;
 
         if (!bm_fileManager.createTemporaryFolder()) {
             return;
@@ -321,7 +329,7 @@ $.__bodymovin.bm_renderManager = (function () {
             var nextLayerData = pendingLayers.pop();
             currentLayer += 1;
             bm_eventDispatcher.sendEvent('bm:render:update', { type: 'update', message: 'Rendering layer: ' + nextLayerData.layer.name, compId: currentCompID, progress: currentLayer / totalLayers });
-            bm_layerElement.renderLayer(nextLayerData, currentCompSettings.hiddens, renderLayerComplete);
+            bm_layerElement.renderLayer(nextLayerData, currentCompSettings.hiddens, renderLayerComplete,unSupportElem);
             /*if (nextLayerData.data.ty === 4 && !currentCompSettings.hiddens) {
                 removeHiddenContent(nextLayerData.data.shapes);
             }*/
@@ -332,6 +340,14 @@ $.__bodymovin.bm_renderManager = (function () {
             $.__bodymovin.bm_sourceHelper.exportVideos(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
             $.__bodymovin.bm_sourceHelper.exportTexts(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
             $.__bodymovin.bm_sourceHelper.exportImages(destinationPath, ob.renderData.exportData.assets, currentCompID, currentCompSettings.original_names);
+        }
+        
+        if(!pendingLayers.length && !unSupportElemSend){
+            var elem = unSupportElem;
+            bm_eventDispatcher.sendEvent('bm:render:unsupport', elem);
+
+            unSupportElem = [];
+            unSupportElemSend = true;
         }
     }
 

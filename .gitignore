@@ -19,3 +19,4 @@ bodymovin.zxp
 ZXPSignCmd.exe
 package-lock.json
 test/
+.vscode

@@ -10,6 +10,7 @@ import Variables from '../../helpers/styles/variables'
 import { goToFolder } from '../../helpers/CompositionsProvider'
 import Bodymovin from '../../components/bodymovin/bodymovin'
 import fluido from '../../assets/animations/fluido.json'
+import UnSupportHeader from './UnSupportHeader'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   compsListContainer: {
     width: '100%',
-    background: 'black',
+    background: 'transparent',
     flexGrow: 1,
     overflow: 'hidden',
     position: 'relative'
@@ -88,6 +89,38 @@ const styles = StyleSheet.create({
     left: '0',
     overflow: 'auto'
   },
+  unSupportList: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+
+  },
+  unSupportE: {
+    borderBottom:'1px solid #FFFFFF',
+  },
+  unSupportType: {
+    width: '30%',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+    padding: '5px',
+    fontSize: '16px',
+    color: '#b71e15',
+    background: '#c0c0c0'
+
+  },
+
+  unSupportContent: {
+    width: '70%',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+    padding: '5px',
+    fontSize: '16px',
+    color: '#b71e15',
+    background: '#a0a0a0'
+  },
+
   bottomNavigation: {
     borderRadius: '4px',
     width: '100%',
@@ -136,6 +169,9 @@ class Render extends React.Component {
     let progress = this.props.render.progress
     let barStyle = { 'transform': 'translateX(-' + 100 * (1 - progress) + '%)' }
     let finishText = this.props.render.finished ? '完成' : '取消'
+    let unSupportElem = this.props.render.unSupportElem
+    let hasUnSupportElem = unSupportElem.length == 0;
+
     return (
       <div className={css(styles.wrapper)}>
         <div className={css(styles.container)}>
@@ -150,8 +186,23 @@ class Render extends React.Component {
             <div className={css(styles.renderBarProgress)} style={barStyle} />
           </div>
           <div className={css(styles.compsListContainer)}>
-            <ul className={css(styles.compsList)}>
+            {/* <ul className={css(styles.compsList)}>
               {this.getItems()}
+            </ul> */}
+
+            <UnSupportHeader hidden={hasUnSupportElem}></UnSupportHeader>
+            
+            <ul className={css(styles.unSupportList)}>
+              {
+                unSupportElem.map( elem => {
+                  return <li className={css(styles.unSupportE)}>
+                    <div>
+                    <div className={css(styles.unSupportType)}>{elem.type}</div>
+                    <div className={css(styles.unSupportContent)}>{elem.content}</div>
+                    </div>
+                  </li>;
+                })
+              }
             </ul>
           </div>
           <div className={css(styles.bottomNavigation)}>

@@ -54,7 +54,7 @@ function Main_header(props) {
                 <BodymovinRefresh />
             </div>
             <BaseButton text='渲染动画' type='green' classes={styles.button} disabled={!props.canRender} onClick={props.startRender} />
-            <BaseButton text='检查模板' type='gray' classes={styles.button} onClick={props.goToPreview} />
+            {/* <BaseButton text='检查模板' type='gray' classes={styles.button} onClick={props.goToPreview} /> */}
             <div className={css(styles.buttons_separator)}></div>
             {/* <BaseButton text='导入动画' type='gray' classes={styles.right} onClick={props.goToImportFile} />
             <BaseButton text='获取播放器' type='gray' classes={styles.right} onClick={props.goToPlayer} /> */}
