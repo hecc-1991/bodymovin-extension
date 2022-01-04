@@ -142,6 +142,11 @@ $.__bodymovin.bm_renderManager = (function () {
         }
     }
 
+    function openInViewer(id) {
+        alert("hecc--openInViewer: "+id)
+        //layerInfo.containingComp.openInViewer();
+    }
+
     function render(comp, destination, fsDestination, compSettings, lutPath) {
         $.__bodymovin.bm_sourceHelper.reset();
         $.__bodymovin.bm_textShapeHelper.reset();
@@ -494,6 +499,7 @@ $.__bodymovin.bm_renderManager = (function () {
     ob.shouldExportOldFormat = shouldExportOldFormat;
     ob.shouldSkipDefaultProperties = shouldSkipDefaultProperties;
     ob.shouldIncludeNotSupportedProperties = shouldIncludeNotSupportedProperties;
+    ob.openInViewer = openInViewer;
 
     return ob;
 }());

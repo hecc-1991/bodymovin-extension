@@ -155,19 +155,20 @@ $.__bodymovin.bm_layerElement = (function () {
         var frameRate = layerOb.framerate;
         completeCallback = callback;
 
-        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo.name,layerInfo.enabled);
-
         if (layerData.render === false) {
             completeCallback();
             return;
         }
+
+        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo.name,layerInfo.enabled);
+
         layerData.sr = layerInfo.stretch / 100;
 
         var lType = layerData.ty;
         if (lType !== layerTypes.camera) {
             bm_transformHelper.exportTransform(layerInfo, layerData, frameRate);
-            bm_maskHelper.exportMasks(layerInfo, layerData, frameRate);
-            bm_effectsHelper.exportEffects(layerInfo, layerData, frameRate, includeHiddenData);
+            bm_maskHelper.exportMasks(layerInfo, layerData, frameRate,unSupportElem);
+            bm_effectsHelper.exportEffects(layerInfo, layerData, frameRate, includeHiddenData,unSupportElem);
             bm_layerStylesHelper.exportStyles(layerInfo, layerData, frameRate);
             bm_timeremapHelper.exportTimeremap(layerInfo, layerData, frameRate);
         }
@@ -203,6 +204,8 @@ $.__bodymovin.bm_layerElement = (function () {
             layerData.hasmb = true;
         }
         layerData.bm = bm_blendModes.getBlendMode(layerInfo.blendingMode);
+
+        bm_SupportElemChecker.checkBlendMode(unSupportElem,layerInfo.blendingMode,layerInfo.name,layerData.ty);
 
         completeCallback();
     }

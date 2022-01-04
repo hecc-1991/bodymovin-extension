@@ -20,6 +20,11 @@ function updateUnSupportElem(state, action) {
   return newState
 }
 
+// function openInViewer(state, action) {
+//   let newState = { ...state, ...{ id: "openInViewer01" } }
+//   return newState
+// }
+
 function updateFontsData(state, action) {
   let fontFormData = {
     origin: 0,
@@ -101,6 +106,8 @@ export default function compositions(state = initialState, action) {
       return updateRenderData(state, action)
     case actionTypes.RENDER_UNSUPPORT:
       return updateUnSupportElem(state, action)
+    // case actionTypes.RENDER_OPEN_IN_VIEWER:
+    //   return openInViewer(state, action)
     case actionTypes.RENDER_START:
       return startRender(state, action)
     case actionTypes.RENDER_STOP:

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import { stopRender } from '../../redux/actions/renderActions'
+import { openInViewer } from '../../redux/actions/renderActions'
 import { goToComps } from '../../redux/actions/compositionActions'
 import render_selector from '../../redux/selectors/render_selector'
 import RenderItem from './list/RenderItem'
@@ -138,6 +139,8 @@ class Render extends React.Component {
     super()
     this.endRender = this.endRender.bind(this)
     this.getItem = this.getItem.bind(this)
+    this.showUnSupportElem = this.showUnSupportElem.bind(this)
+
   }
 
   getItem(item) {
@@ -160,6 +163,10 @@ class Render extends React.Component {
     //browserHistory.push('/')
   }
 
+  showUnSupportElem() {
+    this.props.openInViewer()
+  }
+
   navigateToFolder(item) {
     goToFolder(item.destination)
   }
@@ -170,7 +177,7 @@ class Render extends React.Component {
     let barStyle = { 'transform': 'translateX(-' + 100 * (1 - progress) + '%)' }
     let finishText = this.props.render.finished ? '完成' : '取消'
     let unSupportElem = this.props.render.unSupportElem
-    let hasUnSupportElem = unSupportElem.length == 0;
+    let hasUnSupportElem = unSupportElem.length === 0;
 
     return (
       <div className={css(styles.wrapper)}>
@@ -195,7 +202,7 @@ class Render extends React.Component {
             <ul className={css(styles.unSupportList)}>
               {
                 unSupportElem.map( elem => {
-                  return <li className={css(styles.unSupportE)}>
+                  return <li className={css(styles.unSupportE)} onClick={this.showUnSupportElem}>
                     <div>
                     <div className={css(styles.unSupportType)}>{elem.type}</div>
                     <div className={css(styles.unSupportContent)}>{elem.content}</div>
@@ -220,7 +227,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   stopRender: stopRender,
-  goToComps: goToComps
+  goToComps: goToComps,
+  openInViewer: openInViewer,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Render)

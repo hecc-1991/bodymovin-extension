@@ -2,6 +2,9 @@
 /*global $, MaskMode*/
 $.__bodymovin.bm_maskHelper = (function () {
     var bm_keyframeHelper = $.__bodymovin.bm_keyframeHelper;
+    var bm_eventDispatcher = $.__bodymovin.bm_eventDispatcher;
+    var bm_SupportElemChecker = $.__bodymovin.bm_SupportElemChecker;
+
     var ob = {};
 
     function getMaskMode(num) {
@@ -25,7 +28,7 @@ $.__bodymovin.bm_maskHelper = (function () {
         }
     }
     
-    function exportMasks(layerInfo, layerData, frameRate) {
+    function exportMasks(layerInfo, layerData, frameRate,unSupportElem) {
         if (!(layerInfo.mask && layerInfo.mask.numProperties > 0)) {
             return;
         }
@@ -36,6 +39,7 @@ $.__bodymovin.bm_maskHelper = (function () {
         var i, len = masks.numProperties, maskElement;
         for (i = 0; i < len; i += 1) {
             maskElement = masks(i + 1);
+
             var shapeData = {
                 inv: maskElement.inverted,
                 mode: getMaskMode(maskElement.maskMode)
@@ -49,6 +53,8 @@ $.__bodymovin.bm_maskHelper = (function () {
             }
             shapeData.nm = maskElement.name;
             layerData.masksProperties.push(shapeData);
+
+            bm_SupportElemChecker.checkMask(unSupportElem,maskElement.name,maskElement.maskMode,shapeData.x,maskElement.enabled,layerInfo.name);
         }
     }
     

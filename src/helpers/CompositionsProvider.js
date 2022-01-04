@@ -246,6 +246,17 @@ csInterface.addEventListener('bm:split:animation', async function (ev) {
 	}
 })
 
+function showInViewer(id) {
+	let prom = new Promise(function (resolve, reject) {
+		extensionLoader.then(function () {
+			var eScript = '$.__bodymovin.bm_renderManager.openInViewer('+id+')';
+			csInterface.evalScript(eScript);
+			resolve();
+		})
+	})
+	return prom
+}
+
 function getCompositions() {
 	let prom = new Promise(function (resolve, reject) {
 		extensionLoader.then(function () {
@@ -440,5 +451,6 @@ export {
 	initializeServer,
 	riveFileSaveSuccess,
 	riveFileSaveFailed,
-	getProjectPath,
+	getProjectPath, 
+	showInViewer, 
 }

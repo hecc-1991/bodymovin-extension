@@ -12,6 +12,13 @@ function stopRender(comp) {
 	}
 }
 
+function openInViewer() {
+	return {
+		type: actionTypes.RENDER_OPEN_IN_VIEWER
+	}
+}
+
+
 function updateFontOrigin(origin, item) {
 	return {
 		type: actionTypes.RENDER_UPDATE_FONT_ORIGIN,
@@ -48,5 +55,6 @@ export {
 	updateFontOrigin,
 	updateInput,
 	setFonts,
-	showRenderBlock
+	showRenderBlock,
+	openInViewer,
 }
