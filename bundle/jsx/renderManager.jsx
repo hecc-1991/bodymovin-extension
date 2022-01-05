@@ -17,11 +17,11 @@ $.__bodymovin.bm_renderManager = (function () {
     var bm_fileManager = $.__bodymovin.bm_fileManager;
     var bm_lutHelper = $.__bodymovin.bm_lutHelper;
     var bm_generalUtils = $.__bodymovin.bm_generalUtils;
-    
+    var bm_SupportElemChecker = $.__bodymovin.bm_SupportElemChecker;
+
     var ob = {}, pendingLayers = [], pendingComps = [], destinationPath, fsDestinationPath, currentCompID, totalLayers, currentLayer, currentCompSettings, hasExpressionsFlag;
     var currentExportedComps = [];
 
-    var unSupportElem = [];
     var unSupportElemSend = false;
 
     var _lutPath;
@@ -143,12 +143,10 @@ $.__bodymovin.bm_renderManager = (function () {
     }
 
     function openInViewer(id) {
-        for (var index = 0; index < unSupportElem.length; index++) {
-            var e = unSupportElem[index];
-            if(e.msg.id === id){
-                e.layer.containingComp.openInViewer();
-                e.layer.selected = true;
-            }
+        var layer = bm_SupportElemChecker.searchLayer(id);
+        if(layer){
+            layer.containingComp.openInViewer();
+            layer.selected = true;
         }
     }
 
@@ -157,7 +155,7 @@ $.__bodymovin.bm_renderManager = (function () {
         $.__bodymovin.bm_textShapeHelper.reset();
         bm_lutHelper.reset();
 
-        unSupportElem = [];
+        bm_SupportElemChecker.clear();
         unSupportElemSend = false;
 
         if (!bm_fileManager.createTemporaryFolder()) {
@@ -339,7 +337,7 @@ $.__bodymovin.bm_renderManager = (function () {
             var nextLayerData = pendingLayers.pop();
             currentLayer += 1;
             bm_eventDispatcher.sendEvent('bm:render:update', { type: 'update', message: 'Rendering layer: ' + nextLayerData.layer.name, compId: currentCompID, progress: currentLayer / totalLayers });
-            bm_layerElement.renderLayer(nextLayerData, currentCompSettings.hiddens, renderLayerComplete,unSupportElem);
+            bm_layerElement.renderLayer(nextLayerData, currentCompSettings.hiddens, renderLayerComplete);
             /*if (nextLayerData.data.ty === 4 && !currentCompSettings.hiddens) {
                 removeHiddenContent(nextLayerData.data.shapes);
             }*/
@@ -353,12 +351,8 @@ $.__bodymovin.bm_renderManager = (function () {
         }
         
         if(!pendingLayers.length && !unSupportElemSend){
-            var elems = [];
-            for (var i = 0; i < unSupportElem.length; i++) {
-                var e = unSupportElem[i];
-                elems.push(e.msg);
-                
-            }
+            var elems = bm_SupportElemChecker.listMessage();
+
             bm_eventDispatcher.sendEvent('bm:render:unsupport', elems);
 
             unSupportElemSend = true;

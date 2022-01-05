@@ -4,24 +4,7 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
 
     var bm_eventDispatcher = $.__bodymovin.bm_eventDispatcher;
 
-
-    var layerTypesEnble = [
-        true,   //precomp : 0,
-        true,   //solid : 1,
-        true,   //still : 2,
-        true,   //nullLayer : 3,
-        true,   //shape : 4,
-        true,   //text : 5,
-        true,   //audio : 6,
-        false,  //pholderVideo : 7,
-        false,  //imageSeq : 8,
-        true,   //video : 9,
-        false,  //pholderStill : 10,
-        false,  //guide : 11,
-        true,   //adjustment : 12,
-        true,   //camera : 13,
-        false,  //light : 14
-    ];
+    var unSupportElem = [];
 
     function getMaskMode(num) {
         switch (num) {
@@ -255,11 +238,29 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         return false;
     }
 
-    function checkLayer(unSupportElem, type, layer) {
+    function checkLayer(type, layer) {
         var name = layer.name;
         var enabled = layer.enabled;
 
-        if (!layerTypesEnble[type] && enabled) {
+        const LayerTypesEnble = [
+            true,   //precomp : 0,
+            true,   //solid : 1,
+            true,   //still : 2,
+            true,   //nullLayer : 3,
+            true,   //shape : 4,
+            true,   //text : 5,
+            true,   //audio : 6,
+            false,  //pholderVideo : 7,
+            false,  //imageSeq : 8,
+            true,   //video : 9,
+            false,  //pholderStill : 10,
+            false,  //guide : 11,
+            true,   //adjustment : 12,
+            true,   //camera : 13,
+            false,  //light : 14
+        ];
+
+        if (!LayerTypesEnble[type] && enabled) {
             var id = unSupportElem.length;
             var e = {
                 msg: {
@@ -275,7 +276,7 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         }
     }
 
-    function checkMask(unSupportElem, maskName, maskMode, expansion, enabled, layer) {
+    function checkMask(maskName, maskMode, expansion, enabled, layer) { 
         var layerName = layer.name;
         var idx = getMaskMode(maskMode);
 
@@ -314,7 +315,86 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         }
     }
 
-    function checkBlendMode(unSupportElem, blendMode, layerType, layer) {
+    function checkMatteDst(layerType,layer){
+        var layerName = layer.name;
+
+        const MatteDstEnble = [
+            true,   //precomp : 0,
+            true,   //solid : 1,
+            true,   //still : 2,
+            false,   //nullLayer : 3,
+            true,   //shape : 4,
+            true,   //text : 5,
+            false,   //audio : 6,
+            false,  //pholderVideo : 7,
+            false,  //imageSeq : 8,
+            true,   //video : 9,
+            false,  //pholderStill : 10,
+            false,  //guide : 11,
+            true,   //adjustment : 12,
+            false,   //camera : 13,
+            false,  //light : 14
+        ];
+
+        const MatteName = [
+            "alpha",
+            "alpha反转",
+            "亮度",
+            "亮度反转",
+        ];
+
+        if(!MatteDstEnble[layerType]){
+            var id = unSupportElem.length;
+            var e = {
+                msg: {
+                    id: id,
+                    type: "轨道遮罩",
+                    content: "图层<" + layerName + ">的<" + MatteName[layer.trackMatteType] + ">"
+                },
+                layer: layer
+            };
+            unSupportElem.push(e);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
+        }
+    }
+
+    function checkMatteSrc(layerType,layer){
+        var layerName = layer.name;
+
+        const MatteSrcEnble = [
+            true,   //precomp : 0,
+            true,   //solid : 1,
+            true,   //still : 2,
+            false,   //nullLayer : 3,
+            true,   //shape : 4,
+            false,   //text : 5,
+            false,   //audio : 6,
+            false,  //pholderVideo : 7,
+            false,  //imageSeq : 8,
+            true,   //video : 9,
+            false,  //pholderStill : 10,
+            false,  //guide : 11,
+            false,   //adjustment : 12,
+            false,   //camera : 13,
+            false,  //light : 14
+        ];
+
+        if(!MatteSrcEnble[layerType]){
+            var id = unSupportElem.length;
+            var e = {
+                msg: {
+                    id: id,
+                    type: "轨道遮罩",
+                    content: "遮罩图层<" + layerName + ">"
+                },
+                layer: layer
+            };
+            unSupportElem.push(e);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
+        }
+    }
+
+    function checkBlendMode(blendMode, layerType, layer) {
         var layerName = layer.name;
 
         var idx = getBlendMode(blendMode);
@@ -334,7 +414,43 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         }
     }
 
-    function checkEffect(unSupportElem, effectMatchName, effectName, enabled, layer) {
+    function checkMotionBlur(layerType, layer){
+        var layerName = layer.name;
+
+        const MotionBluEnble = [
+            true,   //precomp : 0,
+            true,   //solid : 1,
+            true,   //still : 2,
+            false,   //nullLayer : 3,
+            true,   //shape : 4,
+            false,   //text : 5,
+            false,   //audio : 6,
+            false,  //pholderVideo : 7,
+            false,  //imageSeq : 8,
+            true,   //video : 9,
+            false,  //pholderStill : 10,
+            false,  //guide : 11,
+            false,   //adjustment : 12,
+            false,   //camera : 13,
+            false,  //light : 14
+        ];
+
+        if(!MotionBluEnble[layerType]){
+            var id = unSupportElem.length;
+            var e = {
+                msg: {
+                    id: id,
+                    type: "运动模糊",
+                    content: "图层<" + layerName + ">的运动模糊"
+                },
+                layer: layer
+            };
+            unSupportElem.push(e);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
+        }
+    }
+
+    function checkEffect(effectMatchName, effectName, enabled, layer) {
         var layerName = layer.name;
 
         if (!findEffect(effectMatchName) && enabled) {
@@ -352,12 +468,42 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         }
     }
 
+    function searchLayer(id){
+        for (var index = 0; index < unSupportElem.length; index++) {
+            var e = unSupportElem[index];
+            if(e.msg.id === id){
+                return e.layer;
+            }
+        }
+        return null;
+    }
+
+    function listMessage(){
+        var elems = [];
+        for (var i = 0; i < unSupportElem.length; i++) {
+            var e = unSupportElem[i];
+            elems.push(e.msg);
+        }
+
+        return elems;
+    }
+
+    function clear() {
+        unSupportElem = [];
+    }
+
     var ob = {};
 
     ob.checkLayer = checkLayer;
     ob.checkMask = checkMask;
+    ob.checkMatteDst = checkMatteDst;
+    ob.checkMatteSrc = checkMatteSrc;
     ob.checkBlendMode = checkBlendMode;
+    ob.checkMotionBlur = checkMotionBlur;
     ob.checkEffect = checkEffect;
+    ob.searchLayer = searchLayer;
+    ob.listMessage = listMessage;
+    ob.clear = clear;
 
     return ob;
 })();

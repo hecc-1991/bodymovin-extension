@@ -79,11 +79,14 @@ $.__bodymovin.bm_layerElement = (function () {
                     layerData.tt = 4;
                     break;
             }
+            bm_SupportElemChecker.checkMatteDst(layerType,layerInfo);
+
         } else if (layerInfo.isTrackMatte) {
             if (layerInfo.isValid !== false) {
                 layerData.render = true;
                 layerData.td = 1;
             }
+            bm_SupportElemChecker.checkMatteSrc(layerType,layerInfo);
         }
         return layerData;
     }
@@ -149,13 +152,13 @@ $.__bodymovin.bm_layerElement = (function () {
         }
     }
 
-    function renderLayer(layerOb, includeHiddenData, callback,unSupportElem) {
+    function renderLayer(layerOb, includeHiddenData, callback) {
         var layerInfo = layerOb.layer;
         var layerData = layerOb.data;
         var frameRate = layerOb.framerate;
         completeCallback = callback;
 
-        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo);
+        bm_SupportElemChecker.checkLayer(layerData.ty,layerInfo);
 
         if (layerData.render === false) {
             completeCallback();
@@ -167,8 +170,8 @@ $.__bodymovin.bm_layerElement = (function () {
         var lType = layerData.ty;
         if (lType !== layerTypes.camera) {
             bm_transformHelper.exportTransform(layerInfo, layerData, frameRate);
-            bm_maskHelper.exportMasks(layerInfo, layerData, frameRate,unSupportElem);
-            bm_effectsHelper.exportEffects(layerInfo, layerData, frameRate, includeHiddenData,unSupportElem);
+            bm_maskHelper.exportMasks(layerInfo, layerData, frameRate);
+            bm_effectsHelper.exportEffects(layerInfo, layerData, frameRate, includeHiddenData);
             bm_layerStylesHelper.exportStyles(layerInfo, layerData, frameRate);
             bm_timeremapHelper.exportTimeremap(layerInfo, layerData, frameRate);
         }
@@ -202,10 +205,11 @@ $.__bodymovin.bm_layerElement = (function () {
         layerData.cp = layerInfo.collapseTransformation;
         if (layerInfo.motionBlur) {
             layerData.hasmb = true;
+            bm_SupportElemChecker.checkMotionBlur(layerData.ty,layerInfo);
         }
         layerData.bm = bm_blendModes.getBlendMode(layerInfo.blendingMode);
 
-        bm_SupportElemChecker.checkBlendMode(unSupportElem,layerInfo.blendingMode,layerData.ty,layerInfo);
+        bm_SupportElemChecker.checkBlendMode(layerInfo.blendingMode,layerData.ty,layerInfo);
 
         completeCallback();
     }

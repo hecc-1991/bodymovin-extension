@@ -307,7 +307,7 @@ $.__bodymovin.bm_effectsHelper = (function () {
         return ob;
     }
 
-    function exportEffects(layerInfo, layerData, frameRate, includeHiddenData,unSupportElem) {
+    function exportEffects(layerInfo, layerData, frameRate, includeHiddenData) {
         //bm_eventDispatcher.log('PropertyType.PROPERTY' + PropertyType.PROPERTY);
         //bm_eventDispatcher.log('PropertyType.INDEXED_GROUP' + PropertyType.INDEXED_GROUP);
         //bm_eventDispatcher.log('PropertyType.NAMED_GROUP' + PropertyType.NAMED_GROUP);
@@ -327,7 +327,7 @@ $.__bodymovin.bm_effectsHelper = (function () {
             //     str += jj + ","
             // bm_eventDispatcher.log("hecc2: "+ str);
             // bm_eventDispatcher.log(i+"/"+len+"=>"+effectElement.matchName +" : "+ effectElement.name +" : "+ effectElement.propertyIndex +" : "+ effectElement.propertyType);
-            bm_SupportElemChecker.checkEffect(unSupportElem,effectElement.matchName, effectElement.name,effectElement.enabled,layerInfo);
+            bm_SupportElemChecker.checkEffect(effectElement.matchName, effectElement.name,effectElement.enabled,layerInfo);
 
             if (effectElement.enabled || includeHiddenData) {
                 var effectType = getEffectType(effectElement.matchName);
