@@ -12,9 +12,10 @@ function stopRender(comp) {
 	}
 }
 
-function openInViewer() {
+function openInViewer(id) {
 	return {
-		type: actionTypes.RENDER_OPEN_IN_VIEWER
+		type: actionTypes.RENDER_OPEN_IN_VIEWER,
+		id: id
 	}
 }
 

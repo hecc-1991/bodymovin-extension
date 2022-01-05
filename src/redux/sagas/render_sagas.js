@@ -19,9 +19,9 @@ function *searchStoredFonts(action) {
 	}
 }
 
-function *openInViewer() {
+function *openInViewer(action) {
 	try{
-		yield fork(showInViewer,"1")
+		yield fork(showInViewer,action.id)
 	} catch(err) {
 		
 	}

@@ -12,6 +12,7 @@ import { goToFolder } from '../../helpers/CompositionsProvider'
 import Bodymovin from '../../components/bodymovin/bodymovin'
 import fluido from '../../assets/animations/fluido.json'
 import UnSupportHeader from './UnSupportHeader'
+import UnSupportItem from './UnSupportItem'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -96,31 +97,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
 
   },
-  unSupportE: {
-    borderBottom:'1px solid #FFFFFF',
-  },
-  unSupportType: {
-    width: '30%',
-    display: 'inline-block',
-    verticalAlign: 'middle',
-    textAlign: 'center',
-    padding: '5px',
-    fontSize: '16px',
-    color: '#b71e15',
-    background: '#c0c0c0'
 
-  },
-
-  unSupportContent: {
-    width: '70%',
-    display: 'inline-block',
-    verticalAlign: 'middle',
-    textAlign: 'center',
-    padding: '5px',
-    fontSize: '16px',
-    color: '#b71e15',
-    background: '#a0a0a0'
-  },
 
   bottomNavigation: {
     borderRadius: '4px',
@@ -140,7 +117,6 @@ class Render extends React.Component {
     this.endRender = this.endRender.bind(this)
     this.getItem = this.getItem.bind(this)
     this.showUnSupportElem = this.showUnSupportElem.bind(this)
-
   }
 
   getItem(item) {
@@ -163,8 +139,8 @@ class Render extends React.Component {
     //browserHistory.push('/')
   }
 
-  showUnSupportElem() {
-    this.props.openInViewer()
+  showUnSupportElem(id) {
+    this.props.openInViewer(id)
   }
 
   navigateToFolder(item) {
@@ -177,7 +153,7 @@ class Render extends React.Component {
     let barStyle = { 'transform': 'translateX(-' + 100 * (1 - progress) + '%)' }
     let finishText = this.props.render.finished ? '完成' : '取消'
     let unSupportElem = this.props.render.unSupportElem
-    let hasUnSupportElem = unSupportElem.length === 0;
+    let hasUnSupportElem = unSupportElem.length == 0;
 
     return (
       <div className={css(styles.wrapper)}>
@@ -201,13 +177,8 @@ class Render extends React.Component {
             
             <ul className={css(styles.unSupportList)}>
               {
-                unSupportElem.map( elem => {
-                  return <li className={css(styles.unSupportE)} onClick={this.showUnSupportElem}>
-                    <div>
-                    <div className={css(styles.unSupportType)}>{elem.type}</div>
-                    <div className={css(styles.unSupportContent)}>{elem.content}</div>
-                    </div>
-                  </li>;
+                unSupportElem.map( (elem,index) => {
+                  return <UnSupportItem key={index} index={index} elem={elem} showUnSupportElem={this.showUnSupportElem}></UnSupportItem>;
                 })
               }
             </ul>

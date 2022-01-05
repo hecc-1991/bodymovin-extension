@@ -14,6 +14,7 @@ $.evalFile(extensionPath + 'utils/expressions/reservedPropertiesHelper.jsx');
 $.evalFile(extensionPath + 'utils/expressions/valueAssignmentHelper.jsx');
 $.evalFile(extensionPath + 'utils/expressions/variableDeclarationHelper.jsx');
 $.evalFile(extensionPath + 'utils/expressionHelper.jsx');
+$.evalFile(extensionPath + 'utils/SupportElemChecker.jsx');
 $.evalFile(extensionPath + 'helpers/fileManager.jsx');
 $.evalFile(extensionPath + 'exporters/exporterHelpers.jsx');
 $.evalFile(extensionPath + 'exporters/bannerExporter.jsx');
@@ -52,14 +53,13 @@ $.evalFile(extensionPath + 'utils/sourceHelper.jsx');
 $.evalFile(extensionPath + 'utils/shapeHelper.jsx');
 $.evalFile(extensionPath + 'utils/textShapeHelper.jsx');
 $.evalFile(extensionPath + 'utils/transformation-matrix.jsx');
-$.evalFile(extensionPath + 'utils/SupportElemChecker.jsx');
 
-var globalVariables = ['bm_eventDispatcher', 'bm_generalUtils', 'bm_expressionHelper', 'esprima', 'escodegen'
+var globalVariables = ['bm_eventDispatcher',"bm_SupportElemChecker", 'bm_generalUtils', 'bm_expressionHelper', 'esprima', 'escodegen'
 	, 'bez', 'PropertyFactory', 'bm_keyframeHelper', 'bm_transformHelper', 'bm_maskHelper', 'bm_lutHelper', 'bm_timeremapHelper'
 	, 'bm_effectsHelper', 'bm_layerStylesHelper', 'bm_cameraHelper', 'bm_XMPHelper', 'bm_ProjectHelper', 'bm_markerHelper'
 	, 'bm_textHelper', 'bm_boundingBox', 'bm_layerElement', 'bm_projectManager', 'bm_compsManager', 'bm_dataManager'
 	, 'bm_renderManager', 'bm_downloadManager', 'bm_sourceHelper', 'bm_shapeHelper', 'bm_textAnimatorHelper'
-	, 'bm_textShapeHelper',"bm_SupportElemChecker"]
+	, 'bm_textShapeHelper']
 var i, len = globalVariables.length;
 for (i = 0; i < len; i += 1) {
 	if (this[globalVariables[i]]) {

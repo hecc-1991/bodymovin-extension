@@ -255,28 +255,43 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         return false;
     }
 
-    function checkLayer(unSupportElem, type, name, enabled) {
+    function checkLayer(unSupportElem, type, layer) {
+        var name = layer.name;
+        var enabled = layer.enabled;
 
         if (!layerTypesEnble[type] && enabled) {
+            var id = unSupportElem.length;
             var e = {
-                type: "图层",
-                content: "图层<" + name + ">"
+                msg: {
+                    id: id,
+                    type: "图层",
+                    content: "图层<" + name + ">"
+                },
+                layer: layer
             };
+
             unSupportElem.push(e);
-            bm_eventDispatcher.log("hecc-- " + e.content);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
         }
     }
 
-    function checkMask(unSupportElem, maskName, maskMode, expansion, enabled, layerName) {
+    function checkMask(unSupportElem, maskName, maskMode, expansion, enabled, layer) {
+        var layerName = layer.name;
         var idx = getMaskMode(maskMode);
 
         if (!maskTypesEnble[idx] && enabled) {
+            var id = unSupportElem.length;
             var e = {
-                type: "蒙版",
-                content: "图层<" + layerName + ">的<" + maskName + ">属性：" + maskTypesName[idx]
+                msg: {
+                    id: id,
+                    type: "蒙版",
+                    content: "图层<" + layerName + ">的<" + maskName + ">属性：" + maskTypesName[idx]
+                },
+                layer: layer
             };
+
             unSupportElem.push(e);
-            bm_eventDispatcher.log("hecc-- " + e.content);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
         }
 
         var hasExpansion = true;
@@ -285,38 +300,55 @@ $.__bodymovin.bm_SupportElemChecker = (function () {
         }
 
         if (hasExpansion && enabled) {
+            var id = unSupportElem.length;
             var e = {
-                type: "蒙版",
-                content: "图层<" + layerName + ">的<" + maskName + ">属性：蒙版扩展"
+                msg: {
+                    id: id,
+                    type: "蒙版",
+                    content: "图层<" + layerName + ">的<" + maskName + ">属性：蒙版扩展"
+                },
+                layer: layer
             };
             unSupportElem.push(e);
-            bm_eventDispatcher.log("hecc-- " + e.content);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
         }
     }
 
-    function checkBlendMode(unSupportElem, blendMode, layerName, layerType) {
+    function checkBlendMode(unSupportElem, blendMode, layerType, layer) {
+        var layerName = layer.name;
 
         var idx = getBlendMode(blendMode);
 
         if (!blendModeTypesEnble[idx] || (layerType == 12 && idx != 0)) {
+            var id = unSupportElem.length;
             var e = {
-                type: "混合模式",
-                content: "图层<" + layerName + ">的<" + blendModeTypesName[idx] + ">"
+                msg: {
+                    id: id,
+                    type: "混合模式",
+                    content: "图层<" + layerName + ">的<" + blendModeTypesName[idx] + ">"
+                },
+                layer: layer
             };
             unSupportElem.push(e);
-            bm_eventDispatcher.log("hecc-- " + e.content);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
         }
     }
 
-    function checkEffect(unSupportElem, effectMatchName,effectName, enabled, layerName) {
+    function checkEffect(unSupportElem, effectMatchName, effectName, enabled, layer) {
+        var layerName = layer.name;
 
         if (!findEffect(effectMatchName) && enabled) {
+            var id = unSupportElem.length;
             var e = {
-                type: "效果",
-                content: "图层<" + layerName + ">的<" + effectName + ">"
+                msg: {
+                    id: id,
+                    type: "效果",
+                    content: "图层<" + layerName + ">的<" + effectName + ">"
+                },
+                layer: layer
             };
             unSupportElem.push(e);
-            bm_eventDispatcher.log("hecc-- " + e.content);
+            bm_eventDispatcher.log("hecc-- " + e.msg.content);
         }
     }
 

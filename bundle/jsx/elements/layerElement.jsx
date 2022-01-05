@@ -155,12 +155,12 @@ $.__bodymovin.bm_layerElement = (function () {
         var frameRate = layerOb.framerate;
         completeCallback = callback;
 
+        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo);
+
         if (layerData.render === false) {
             completeCallback();
             return;
         }
-
-        bm_SupportElemChecker.checkLayer(unSupportElem,layerData.ty,layerInfo.name,layerInfo.enabled);
 
         layerData.sr = layerInfo.stretch / 100;
 
@@ -205,7 +205,7 @@ $.__bodymovin.bm_layerElement = (function () {
         }
         layerData.bm = bm_blendModes.getBlendMode(layerInfo.blendingMode);
 
-        bm_SupportElemChecker.checkBlendMode(unSupportElem,layerInfo.blendingMode,layerInfo.name,layerData.ty);
+        bm_SupportElemChecker.checkBlendMode(unSupportElem,layerInfo.blendingMode,layerData.ty,layerInfo);
 
         completeCallback();
     }

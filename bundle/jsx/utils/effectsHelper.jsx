@@ -327,7 +327,7 @@ $.__bodymovin.bm_effectsHelper = (function () {
             //     str += jj + ","
             // bm_eventDispatcher.log("hecc2: "+ str);
             // bm_eventDispatcher.log(i+"/"+len+"=>"+effectElement.matchName +" : "+ effectElement.name +" : "+ effectElement.propertyIndex +" : "+ effectElement.propertyType);
-            bm_SupportElemChecker.checkEffect(unSupportElem,effectElement.matchName, effectElement.name,effectElement.enabled,layerInfo.name);
+            bm_SupportElemChecker.checkEffect(unSupportElem,effectElement.matchName, effectElement.name,effectElement.enabled,layerInfo);
 
             if (effectElement.enabled || includeHiddenData) {
                 var effectType = getEffectType(effectElement.matchName);

@@ -54,7 +54,7 @@ $.__bodymovin.bm_maskHelper = (function () {
             shapeData.nm = maskElement.name;
             layerData.masksProperties.push(shapeData);
 
-            bm_SupportElemChecker.checkMask(unSupportElem,maskElement.name,maskElement.maskMode,shapeData.x,maskElement.enabled,layerInfo.name);
+            bm_SupportElemChecker.checkMask(unSupportElem,maskElement.name,maskElement.maskMode,shapeData.x,maskElement.enabled,layerInfo);
         }
     }
     

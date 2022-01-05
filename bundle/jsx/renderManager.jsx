@@ -5,7 +5,7 @@ $.__bodymovin.bm_renderManager = (function () {
     'use strict';
 
     var version_number = '5.6.10';
-    var version_tutu_number = '2.3.1';
+    var version_tutu_number = '2.4.0';
 
     var bm_eventDispatcher = $.__bodymovin.bm_eventDispatcher;
     var bm_projectManager = $.__bodymovin.bm_projectManager;
@@ -143,8 +143,13 @@ $.__bodymovin.bm_renderManager = (function () {
     }
 
     function openInViewer(id) {
-        alert("hecc--openInViewer: "+id)
-        //layerInfo.containingComp.openInViewer();
+        for (var index = 0; index < unSupportElem.length; index++) {
+            var e = unSupportElem[index];
+            if(e.msg.id === id){
+                e.layer.containingComp.openInViewer();
+                e.layer.selected = true;
+            }
+        }
     }
 
     function render(comp, destination, fsDestination, compSettings, lutPath) {
@@ -348,10 +353,14 @@ $.__bodymovin.bm_renderManager = (function () {
         }
         
         if(!pendingLayers.length && !unSupportElemSend){
-            var elem = unSupportElem;
-            bm_eventDispatcher.sendEvent('bm:render:unsupport', elem);
+            var elems = [];
+            for (var i = 0; i < unSupportElem.length; i++) {
+                var e = unSupportElem[i];
+                elems.push(e.msg);
+                
+            }
+            bm_eventDispatcher.sendEvent('bm:render:unsupport', elems);
 
-            unSupportElem = [];
             unSupportElemSend = true;
         }
     }
